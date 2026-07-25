@@ -1,0 +1,110 @@
+---
+import '../styles/global.css';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+interface Props {
+  titre: string;
+  description?: string;
+}
+
+const {
+  titre,
+  description = 'Alexis — je construis des outils pour des gens qui gèrent des enfants.',
+} = Astro.props;
+
+const build = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+---
+
+<!doctype html>
+<html lang="fr" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titre}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={titre} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <script is:inline>
+      const stored = localStorage.getItem('theme');
+      const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme =
+        stored ?? (prefersDark ? 'dark' : 'light');
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <div class="shell">
+      <header>
+        <a href="/" class="marque">selixa<span>.</span>fr</a>
+        <nav>
+          <a href="/#projets">projets</a>
+          <a href="/#outils">outils</a>
+          <a href="/#contact">contact</a>
+          <ThemeToggle />
+        </nav>
+      </header>
+
+      <main id="contenu">
+        <slot />
+      </main>
+
+      <footer>
+        <span>build {build} · astro · cloudflare</span>
+        <span class="pique">fait à Lyon, sans framework JS côté client</span>
+      </footer>
+    </div>
+
+    <style>
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding: 1.75rem 0 0.7rem;
+        border-bottom: 1px solid var(--rule-strong);
+      }
+      .marque {
+        font-size: 0.9375rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        border: 0;
+      }
+      .marque span {
+        color: var(--accent);
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 0.6875rem;
+      }
+      nav a {
+        color: var(--muted);
+      }
+      nav a:hover {
+        color: var(--text);
+        border-bottom-color: var(--rule-strong);
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        border-top: 1px solid var(--rule-strong);
+        margin-top: 0.5rem;
+        padding: 0.75rem 0 2.5rem;
+        font-size: 0.625rem;
+        color: var(--faint);
+      }
+      @media (max-width: 34rem) {
+        .pique {
+          display: none;
+        }
+      }
+    </style>
+  </body>
+</html>

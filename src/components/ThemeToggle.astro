@@ -1,0 +1,42 @@
+---
+---
+
+<button id="theme-toggle" type="button" aria-label="Changer de thème">
+  <span data-when="light">clair</span>
+  <span data-when="dark">sombre</span>
+</button>
+
+<style>
+  button {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.2rem 0.5rem;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+  button:hover {
+    color: var(--text);
+    border-color: var(--rule-strong);
+  }
+  [data-when] {
+    display: none;
+  }
+  :global(html[data-theme='light']) [data-when='light'],
+  :global(html[data-theme='dark']) [data-when='dark'] {
+    display: inline;
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  btn?.addEventListener('click', () => {
+    const next =
+      document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('theme', next);
+  });
+</script>

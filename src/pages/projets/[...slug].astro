@@ -1,0 +1,87 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const projets = await getCollection('projets');
+  return projets.map((projet) => ({
+    params: { slug: projet.id },
+    props: { projet },
+  }));
+}
+
+const { projet } = Astro.props;
+const { Content } = await render(projet);
+---
+
+<Base titre={`${projet.data.titre} — selixa.fr`} description={projet.data.resume}>
+  <article class="section">
+    <p class="eyebrow"><a href="/#projets">← retour</a></p>
+    <h1>{projet.data.titre}</h1>
+    <p class="meta">{[projet.data.annee, ...projet.data.stack].join(' · ')}</p>
+    {
+      projet.data.lien && (
+        <p class="lien">
+          <a href={projet.data.lien} rel="noopener">
+            {projet.data.lienLabel ?? new URL(projet.data.lien).hostname} ↗
+          </a>
+        </p>
+      )
+    }
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>
+
+<style>
+  h1 {
+    font-size: 1.375rem;
+  }
+  .meta {
+    font-size: 0.6875rem;
+    color: var(--faint);
+    margin: 0.5rem 0 0;
+  }
+  .lien {
+    font-size: 0.75rem;
+    margin: 0.75rem 0 0;
+  }
+  .prose {
+    margin-top: 2rem;
+    max-width: 62ch;
+  }
+  .prose :global(h2) {
+    font-size: 0.9375rem;
+    margin: 2rem 0 0.6rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--muted);
+  }
+  .prose :global(ul) {
+    padding-left: 1.1rem;
+  }
+  .prose :global(code) {
+    background: var(--surface);
+    border-radius: 3px;
+    padding: 0.05rem 0.3rem;
+    font-size: 0.8125rem;
+  }
+  .prose :global(pre) {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.9rem;
+    overflow-x: auto;
+    font-size: 0.75rem;
+  }
+  .prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
+</style>

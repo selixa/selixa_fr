@@ -1,0 +1,144 @@
+---
+---
+
+<form id="contact-form" novalidate>
+  <div class="champ">
+    <label for="nom">nom</label>
+    <input id="nom" name="nom" type="text" required autocomplete="name" />
+  </div>
+  <div class="champ">
+    <label for="email">email</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      placeholder="prenom@exemple.fr"
+    />
+  </div>
+  <div class="champ">
+    <label for="message">message</label>
+    <textarea id="message" name="message" rows="5" required></textarea>
+  </div>
+
+  <div class="piege" aria-hidden="true">
+    <label for="societe">société</label>
+    <input id="societe" name="societe" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="pied">
+    <button type="submit">Envoyer le message</button>
+    <p id="statut" role="status"></p>
+  </div>
+</form>
+
+<style>
+  form {
+    display: grid;
+    gap: 1rem;
+    max-width: 34rem;
+  }
+  .champ {
+    display: grid;
+    gap: 0.35rem;
+  }
+  label {
+    font-size: 0.6875rem;
+    color: var(--faint);
+  }
+  input,
+  textarea {
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.5rem 0.65rem;
+    width: 100%;
+    resize: vertical;
+  }
+  input:hover,
+  textarea:hover {
+    border-color: var(--rule-strong);
+  }
+  input::placeholder {
+    color: var(--faint);
+  }
+  .piege {
+    position: absolute;
+    left: -9999px;
+  }
+  .pied {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text);
+    background: none;
+    border: 1px solid var(--rule-strong);
+    border-radius: 3px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+  }
+  button:hover {
+    background: var(--surface);
+  }
+  button[disabled] {
+    color: var(--faint);
+    cursor: progress;
+  }
+  #statut {
+    margin: 0;
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+  #statut[data-etat='erreur'] {
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const statut = document.getElementById('statut');
+  const bouton = form?.querySelector('button') as HTMLButtonElement | null;
+
+  const dire = (texte: string, etat = '') => {
+    if (!statut) return;
+    statut.textContent = texte;
+    statut.dataset.etat = etat;
+  };
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+
+    if (!data.nom || !data.email || !data.message) {
+      dire('Il manque un champ.', 'erreur');
+      return;
+    }
+
+    bouton && (bouton.disabled = true);
+    dire('Envoi…');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      dire('Message envoyé. Réponse sous 48 h.');
+    } catch {
+      dire('L\u2019envoi a échoué. Écris directement à alexis@selixa.fr.', 'erreur');
+    } finally {
+      bouton && (bouton.disabled = false);
+    }
+  });
+</script>
