@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { outils } from '../data/outils';
+import { blocs } from '../data/outils';
 
 const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).sort(
   (a, b) => a.data.ordre - b.data.ordre
@@ -12,16 +12,18 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
 <Base titre="selixa.fr — Alexis">
   <section class="section hero">
     <p class="eyebrow"><span class="sigil">~</span> whoami</p>
-    <h1>Alexis, je construis des outils pour des gens qui gèrent des enfants.</h1>
+    <h1>Je conçois et je livre des applications métier, seul, de la base de données à l'écran.</h1>
     <p class="pitch">
-      Fondateur solo de Koloni. Vingt saisons en direction d'accueils collectifs de
-      mineurs, puis Apple Retail, puis customer success, puis j'ai appris à écrire du
-      SQL. Aujourd'hui je fais les trois en même temps.
+      Développeur produit à Lyon, spécialisé no-code et low-code. Je modélise le schéma
+      PostgreSQL, j'écris les fonctions serveur, je construis l'interface et je déploie.
+      Avant ça : Apple Retail, puis customer success — et une vingtaine de saisons en
+      direction d'accueils collectifs de mineurs, ce qui explique pour qui je conçois.
     </p>
     <ul class="tags">
-      <li>Supabase</li>
       <li>PostgreSQL</li>
+      <li>Supabase</li>
       <li>WeWeb</li>
+      <li>FlutterFlow</li>
       <li>Deno</li>
       <li>Cloudflare</li>
     </ul>
@@ -54,22 +56,20 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
 
   <section class="section" id="outils">
     <p class="eyebrow"><span class="sigil">~</span> cat outils.txt</p>
-    <p class="intro">
-      Ce que j'utilise vraiment, classé par ce que j'en fais et pas par ce qui rend
-      bien sur un profil.
-    </p>
     {
-      outils.map((groupe) => (
-        <div class="groupe">
-          <h2>{groupe.categorie}</h2>
-          <ul>
-            {groupe.outils.map((o) => (
-              <li>
+      blocs.map((bloc) => (
+        <div class="bloc">
+          <div class="bloc-tete">
+            <h2>{bloc.titre}</h2>
+            <span class="compte">{bloc.outils.length}</span>
+          </div>
+          <p class="intro">{bloc.intro}</p>
+          <ul class="catalogue">
+            {bloc.outils.map((o) => (
+              <li class="carte">
+                <span class="cat">{o.categorie}</span>
                 <span class="nom">{o.nom}</span>
                 <span class="note">{o.note}</span>
-                <span class="niveau" data-niveau={o.niveau}>
-                  {o.niveau}
-                </span>
               </li>
             ))}
           </ul>
@@ -80,8 +80,8 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
 
   <section class="section contact" id="contact">
     <p class="eyebrow"><span class="sigil">~</span> mail -s "bonjour"</p>
-    <p class="intro">
-      Une mission, une question sur les ACM, une idée à casser. Je lis tout, je réponds
+    <p class="intro intro-seule">
+      Une mission, une question sur un stack, une idée à casser. Je lis tout, je réponds
       sous 48 h.
     </p>
     <ContactForm />
@@ -90,13 +90,13 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
 
 <style>
   .hero h1 {
-    font-size: 1.625rem;
-    line-height: 1.25;
-    max-width: 30ch;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    max-width: 34ch;
   }
   .pitch {
     color: var(--muted);
-    max-width: 56ch;
+    max-width: 60ch;
     margin: 0.9rem 0 0;
   }
   .tags {
@@ -161,7 +161,7 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
     color: var(--muted);
     font-size: 0.8125rem;
     margin: 0.4rem 0 0;
-    max-width: 58ch;
+    max-width: 60ch;
   }
   .meta {
     font-size: 0.6875rem;
@@ -173,48 +173,66 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
     white-space: nowrap;
   }
 
+  .bloc + .bloc {
+    margin-top: 2.5rem;
+  }
+  .bloc-tete {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+  .bloc-tete h2 {
+    font-size: 0.9375rem;
+  }
+  .compte {
+    font-size: 0.625rem;
+    color: var(--faint);
+  }
   .intro {
     color: var(--muted);
-    max-width: 58ch;
-    margin: 0 0 1.75rem;
+    font-size: 0.8125rem;
+    max-width: 62ch;
+    margin: 0.8rem 0 1.25rem;
   }
-  .groupe {
-    margin-bottom: 1.5rem;
+  .intro-seule {
+    margin-bottom: 1.75rem;
   }
-  .groupe h2 {
-    font-size: 0.6875rem;
-    color: var(--faint);
-    font-weight: 400;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--rule);
-  }
-  .groupe ul {
+
+  .catalogue {
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  .groupe li {
     display: grid;
-    grid-template-columns: 11rem 1fr auto;
-    gap: 1rem;
-    align-items: baseline;
-    padding: 0.4rem 0;
-    font-size: 0.8125rem;
+    grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+    gap: 0.6rem;
+  }
+  .carte {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 0.6rem 0.7rem 0.7rem;
+    background: var(--surface);
+  }
+  .carte:hover {
+    border-color: var(--rule-strong);
+  }
+  .cat {
+    font-size: 0.5625rem;
+    color: var(--faint);
+    letter-spacing: 0.04em;
   }
   .nom {
+    font-size: 0.8125rem;
     font-weight: 500;
   }
   .note {
+    font-size: 0.6875rem;
     color: var(--muted);
-    font-size: 0.75rem;
-  }
-  .niveau {
-    font-size: 0.625rem;
-    color: var(--faint);
-    white-space: nowrap;
-  }
-  .niveau[data-niveau='quotidien'] {
-    color: var(--accent);
+    line-height: 1.55;
   }
 
   @media (max-width: 34rem) {
@@ -222,12 +240,8 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
       flex-direction: column;
       gap: 0.5rem;
     }
-    .groupe li {
-      grid-template-columns: 1fr auto;
-    }
-    .note {
-      grid-column: 1 / -1;
-      order: 3;
+    .catalogue {
+      grid-template-columns: 1fr;
     }
   }
 </style>

@@ -6,7 +6,7 @@ statut: "en ligne"
 stack: ["Supabase", "WeWeb", "Resend"]
 lien: "https://legrenierducure.fr"
 lienLabel: "legrenierducure.fr"
-ordre: 2
+ordre: 7
 ---
 
 ## Le contexte
