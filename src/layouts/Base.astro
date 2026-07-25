@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import EasterEgg from '../components/EasterEgg.astro';
 
 interface Props {
   titre: string;
@@ -37,7 +38,7 @@ const build = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
     <a class="skip" href="#contenu">Aller au contenu</a>
     <div class="shell">
       <header>
-        <a href="/" class="marque">selixa<span>.</span>fr</a>
+        <a href="/" class="marque" data-marque>selixa<span>.</span>fr</a>
         <nav>
           <a href="/#projets">projets</a>
           <a href="/#outils">outils</a>
@@ -55,6 +56,8 @@ const build = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
         <span class="pique">fait à Lyon, sans framework JS côté client</span>
       </footer>
     </div>
+
+    <EasterEgg />
 
     <style>
       header {

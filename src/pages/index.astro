@@ -65,17 +65,55 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
           </div>
           <p class="intro">{bloc.intro}</p>
           <ul class="catalogue">
-            {bloc.outils.map((o) => (
-              <li class="carte">
-                <span class="cat">{o.categorie}</span>
-                <span class="nom">{o.nom}</span>
-                <span class="note">{o.note}</span>
-              </li>
-            ))}
+            {bloc.outils.map((o) => {
+              const cible = o.lienAffilie ?? o.lien;
+              const Balise = cible ? 'a' : 'div';
+              return (
+                <li>
+                  <Balise
+                    class="carte"
+                    href={cible}
+                    rel={
+                      cible
+                        ? o.lienAffilie
+                          ? 'noopener sponsored nofollow'
+                          : 'noopener'
+                        : undefined
+                    }
+                  >
+                    <span class="tete">
+                      {o.logo ? (
+                        <img
+                          class="logo"
+                          src={`/logos/${o.logo}.svg`}
+                          alt=""
+                          width="16"
+                          height="16"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span class="monogramme" aria-hidden="true">
+                          {o.nom.slice(0, 2)}
+                        </span>
+                      )}
+                      <span class="nom">{o.nom}</span>
+                      {o.lienAffilie && <span class="aff">aff.</span>}
+                    </span>
+                    <span class="cat">{o.categorie}</span>
+                    <span class="note">{o.note}</span>
+                  </Balise>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ))
     }
+    <p class="mention">
+      Quelques liens de cette page sont des liens de parrainage, signalés par la mention
+      « aff. ». Ils ne changent rien à ce qui est écrit au-dessus — je n'y ai mis que des
+      outils que j'utilise pour de vrai.
+    </p>
   </section>
 
   <section class="section contact" id="contact">
@@ -208,22 +246,69 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
     grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
     gap: 0.6rem;
   }
+  .catalogue li {
+    display: flex;
+  }
   .carte {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
+    width: 100%;
     border: 1px solid var(--rule);
     border-radius: 3px;
     padding: 0.6rem 0.7rem 0.7rem;
     background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
   }
-  .carte:hover {
+  a.carte:hover {
     border-color: var(--rule-strong);
+    border-bottom-color: var(--rule-strong);
+  }
+  a.carte:hover .logo,
+  a.carte:hover .monogramme {
+    opacity: 1;
+    color: var(--accent);
+  }
+  .tete {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .logo {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex: none;
+    opacity: 0.55;
+    filter: grayscale(1);
+  }
+  html[data-theme='dark'] .logo {
+    filter: grayscale(1) invert(1);
+  }
+  .monogramme {
+    font-size: 0.5rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--faint);
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    padding: 0.16rem 0.14rem;
+    flex: none;
+    opacity: 0.7;
+  }
+  .aff {
+    font-size: 0.5rem;
+    color: var(--faint);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0 0.2rem;
   }
   .cat {
     font-size: 0.5625rem;
     color: var(--faint);
     letter-spacing: 0.04em;
+    margin-top: 0.1rem;
   }
   .nom {
     font-size: 0.8125rem;
@@ -233,6 +318,14 @@ const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).
     font-size: 0.6875rem;
     color: var(--muted);
     line-height: 1.55;
+    margin-top: 0.2rem;
+  }
+  .mention {
+    font-size: 0.625rem;
+    color: var(--faint);
+    line-height: 1.6;
+    max-width: 62ch;
+    margin: 2rem 0 0;
   }
 
   @media (max-width: 34rem) {

@@ -1,0 +1,66 @@
+---
+// Portrait ASCII affiché brièvement au clic sur « selixa.fr ».
+// Remplace le contenu de src/data/portrait.txt par le tien
+// (voir outils/photo-en-ascii.py à la racine du dépôt).
+import portrait from '../data/portrait.txt?raw';
+---
+
+<div id="egg" hidden aria-hidden="true">
+  <pre>{portrait}</pre>
+</div>
+
+<style>
+  #egg {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+  #egg[data-visible] {
+    opacity: 1;
+  }
+  pre {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: clamp(0.25rem, 1.15vw, 0.55rem);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    white-space: pre;
+  }
+</style>
+
+<script>
+  const egg = document.getElementById('egg');
+  const marque = document.querySelector<HTMLAnchorElement>('[data-marque]');
+  let minuteur: number | undefined;
+
+  const surAccueil = () =>
+    location.pathname === '/' || location.pathname === '/index.html';
+
+  marque?.addEventListener('click', (e) => {
+    if (!egg || !surAccueil()) return; // ailleurs, le logo ramène à l'accueil
+    e.preventDefault();
+
+    clearTimeout(minuteur);
+    egg.hidden = false;
+    requestAnimationFrame(() => egg.setAttribute('data-visible', ''));
+
+    const duree = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1200 : 2200;
+    minuteur = window.setTimeout(() => {
+      egg.removeAttribute('data-visible');
+      setTimeout(() => (egg.hidden = true), 240);
+    }, duree);
+  });
+
+  console.log(
+    '%cselixa.fr',
+    'font:500 14px ui-monospace,monospace;color:#ba7517',
+    '\n> Tu inspectes le code. Bon réflexe.\n> Le dépôt est public : github.com/selixa/selixa_fr\n> Clique sur le nom du site en haut à gauche.'
+  );
+</script>
