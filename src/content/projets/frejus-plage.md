@@ -1,16 +1,33 @@
 ---
 titre: "Fréjus Plage"
-resume: "Site d'information locale. Présentation, contenus pratiques et référencement sur un secteur très concurrentiel."
-annee: "2024"
+resume: "Site vitrine d'un logement Airbnb à Fréjus, généré avec WeWeb AI."
+annee: "2026"
 statut: "en ligne"
-stack: ["SEO", "contenu"]
 lien: "https://frejusplage.fr"
-lienLabel: "frejusplage.fr"
-ordre: 6
+stack: ["WeWeb AI", "Cloudflare"]
 ---
 
-## À compléter
+Ma mère loue un appartement à Fréjus sur Airbnb. Le problème classique de
+la location saisonnière : la plateforme prend sa commission, impose son
+format, et le voyageur ne voit jamais le logement autrement qu'à travers
+une grille de miniatures identiques à celles des mille autres annonces de
+la même rue.
 
-Cette fiche est un gabarit : remplis-la avec ce que le projet est réellement, ce que tu as construit et ce que ça t'a appris. Trois sections courtes suffisent, comme les autres.
+L'idée de Fréjus Plage était donc de sortir de cette grille. Un site
+dédié, avec ses propres photos, sa propre mise en page, et surtout la
+possibilité de raconter le quartier, la plage, ce qu'on fait sur place —
+tout ce qui ne rentre pas dans les cases d'une annonce standardisée. Le
+site sert de vitrine et de point d'entrée, la réservation continue de
+passer par Airbnb.
 
-Le format qui fonctionne : le contexte en deux phrases, ce que tu as fait concrètement, puis une observation qui montre que tu as compris quelque chose au passage. Cette dernière partie est celle que les recruteurs lisent vraiment.
+Le vrai intérêt du projet, pour moi, c'était de tester WeWeb AI en
+conditions réelles sur un besoin simple. Je connais WeWeb par cœur pour
+l'avoir utilisé sur des applications autrement plus lourdes ; l'objectif
+ici était de voir jusqu'où l'assistant peut porter un site vitrine complet
+sans que j'aille manuellement bricoler chaque conteneur. Verdict : sur un
+projet de cette taille, ça tient. La structure sort propre, le responsive
+est correct d'emblée, et le temps passé se déplace du montage vers ce qui
+compte vraiment, à savoir les textes et le choix des photos.
+
+Un petit projet familial, donc, qui a surtout servi de terrain d'essai
+grandeur nature.
