@@ -1,6 +1,6 @@
 # selixa.fr
 
-Portfolio statique. Astro, aucune base de données, aucun framework JS côté client.
+Portfolio statique. Astro , aucune base de données, aucun framework JS côté client.
 
 ## Démarrer
 
