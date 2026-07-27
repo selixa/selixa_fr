@@ -52,7 +52,7 @@ export const blocs: BlocOutils[] = [
         categorie: 'interfaces',
         note: 'Applications métier complètes. Mon outil de front principal depuis deux ans.',
         lien: 'https://www.weweb.io',
-        // lienAffilie: 'https://www.weweb.io/?via=...',
+        lienAffilie: 'https://dashboard.weweb.io/sign-up/1df88c74-a39e-40e9-ae0d-3d01ace83b0e',
       },
       {
         nom: 'FlutterFlow',
@@ -179,7 +179,7 @@ export const blocs: BlocOutils[] = [
         categorie: 'comptabilité',
         note: 'Comptabilité en ligne. Le rapprochement automatique fait gagner un vrai temps.',
         lien: 'https://www.dougs.fr',
-        // lienAffilie: 'https://www.dougs.fr/?...',
+        lienAffilie: 'https://www.dougs.fr?r=7EkwAkm6sJ',
       },
       {
         nom: 'Revolut',
@@ -213,7 +213,8 @@ export const blocs: BlocOutils[] = [
       {
         nom: 'OpenDisplay',
         categorie: 'affichage',
-        note: "À compléter — remplace cette ligne par ton retour d'usage réel.",
+        note: "Pour étendre l'écran du mac vers un iPad ou un iPhone. Gratuit et Open-source.",
+        lien:'https://opendisplay.app/',
       },
     ],
   },
