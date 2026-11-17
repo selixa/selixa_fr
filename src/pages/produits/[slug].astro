@@ -55,7 +55,7 @@ const video = d.video && {
   description: d.accroche,
   thumbnailUrl: new URL(d.video.poster, Astro.site).toString(),
   contentUrl: new URL(d.video.src, Astro.site).toString(),
-  uploadDate: '2026-10-28',
+  uploadDate: d.video.date,
   inLanguage: 'fr',
 };
 const fil = {

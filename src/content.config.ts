@@ -22,6 +22,8 @@ const produits = defineCollection({
         poster: z.string(),
         sousTitres: z.string().optional(),
         titre: z.string(),
+        /** Date de publication (AAAA-MM-JJ), pour les données structurées. */
+        date: z.string(),
       })
       .optional(),
     url: z.string().url().optional(),

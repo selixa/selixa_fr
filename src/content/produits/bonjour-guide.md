@@ -5,6 +5,11 @@ description: "bonjour.guide crée en 10 minutes le livre d'accueil de votre loca
 titreSeo: "bonjour.guide, le livre d'accueil numérique pour locations de vacances"
 categorie: "Location saisonnière"
 logo: "/brand/produits/bonjour-guide.svg"
+video:
+  src: "/media/bonjour-guide/bonjour-guide.mp4"
+  poster: "/media/bonjour-guide/bonjour-guide.jpg"
+  titre: "bonjour.guide en 60 secondes"
+  date: "2026-11-17"
 statut: "en ligne"
 url: "https://bonjour.guide"
 depuis: "2026"

@@ -10,6 +10,7 @@ video:
   poster: "/media/koloni/koloni-pitch.jpg"
   sousTitres: "/media/koloni/koloni-pitch.vtt"
   titre: "Koloni en 60 secondes"
+  date: "2026-10-28"
 statut: "en ligne"
 url: "https://koloni.fr"
 liens:
