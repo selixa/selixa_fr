@@ -13,8 +13,8 @@ video:
 statut: "en ligne"
 url: "https://koloni.fr"
 liens:
-  # linkedin: "https://www.linkedin.com/company/…"
-  # instagram: "https://www.instagram.com/…"
+  linkedin: "https://www.linkedin.com/company/106038380"
+  instagram: "https://www.instagram.com/koloni_fr/"
   playStore: "bientôt"
   appStore: "bientôt"
 depuis: "2025"
