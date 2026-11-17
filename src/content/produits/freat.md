@@ -5,6 +5,11 @@ description: "Freat recense les cafés, coworkings et bibliothèques où télét
 titreSeo: "Freat, trouver un lieu pour télétravailler : cafés, coworkings, bibliothèques"
 categorie: "Télétravail et nomadisme"
 logo: "/brand/produits/freat.svg"
+video:
+  src: "/media/freat/freat.mp4"
+  poster: "/media/freat/freat.jpg"
+  titre: "Freat en 60 secondes"
+  date: "2026-11-17"
 statut: "en ligne"
 url: "https://freat.io"
 plateformes: ["Web", "Français et anglais"]
