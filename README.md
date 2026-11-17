@@ -73,6 +73,9 @@ selixa.fr. Le bouton « Répondre » de l'e-mail reçu répond directement à l'
 - Expéditeur : `CONTACT_FROM` (`contact@selixa.fr`).
 - Déployer : `cd workers/contact && npx wrangler deploy` ; secret : `npx wrangler secret put CONTACT_TO`.
 
+L'adresse `contact@selixa.fr` (affichée en cas d'échec et dans les mentions légales) est
+une règle Email Routing qui transfère vers la boîte perso.
+
 Un champ piège invisible (`societe`) absorbe les robots : s'il est rempli, le Worker
 répond 204 sans rien envoyer.
 
