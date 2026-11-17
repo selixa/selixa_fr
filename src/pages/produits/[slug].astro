@@ -25,6 +25,7 @@ const application = {
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   ...(d.url && { url: d.url }),
+  ...(d.github && { sameAs: [d.github] }),
   publisher: { '@id': `${Astro.site}#organisation` },
 };
 const fil = {
@@ -74,6 +75,14 @@ const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
           <div>
             <dt>Disponible</dt>
             <dd>{d.plateformes.join(' · ')}</dd>
+          </div>
+        )}
+        {d.github && (
+          <div>
+            <dt>Code</dt>
+            <dd>
+              <a href={d.github} rel="noopener">{d.github.replace(/^https:\/\//, '')}</a>
+            </dd>
           </div>
         )}
         <div>

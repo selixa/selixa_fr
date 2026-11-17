@@ -1,0 +1,196 @@
+---
+// Gabarit des pages d'engagements : hero, texte, et liens vers les autres engagements.
+import Base from './Base.astro';
+import Icone from '../components/Icone.astro';
+import { engagements } from '../data/engagements';
+
+interface Props {
+  slug: string;
+  titreSeo: string;
+  description: string;
+  titre: string;
+  lead: string;
+}
+
+const { slug, titreSeo, description, titre, lead } = Astro.props;
+const courant = engagements.find((e) => e.slug === slug);
+const autres = engagements.filter((e) => e.slug !== slug);
+
+const fil = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Selixacorp', item: Astro.site?.toString() },
+    { '@type': 'ListItem', position: 2, name: 'Engagements', item: new URL('/#engagements', Astro.site).toString() },
+    { '@type': 'ListItem', position: 3, name: courant?.titre ?? titre },
+  ],
+};
+---
+
+<Base titre={titreSeo} description={description} jsonld={[fil]}>
+  <section class="hero-eng trame">
+    <div class="halo" aria-hidden="true"></div>
+    <div class="sx-container">
+      <nav class="fil" aria-label="Fil d'Ariane">
+        <a href="/">Selixacorp</a> <span aria-hidden="true">/</span>
+        <a href="/#engagements">Engagements</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">{courant?.titre}</span>
+      </nav>
+      {courant && (
+        <span class="pastille" data-reveal><Icone nom={courant.icone} taille={28} /></span>
+      )}
+      <h1 class="display" data-reveal style="--i: 1">{titre}</h1>
+      <p class="lead" data-reveal style="--i: 2">{lead}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sx-container prose corps">
+      <slot />
+    </div>
+  </section>
+
+  <section class="section bande trame">
+    <div class="sx-container">
+      <div class="section-tete">
+        <p class="eyebrow">Nos autres engagements</p>
+      </div>
+      <ul class="autres">
+        {autres.map((e, i) => (
+          <li data-reveal style={`--i: ${i}`}>
+            <a class="sx-card autre" href={`/engagements/${e.slug}/`}>
+              <span class="autre-nom">{e.titre}</span>
+              <span class="muted">{e.court}</span>
+              <span class="autre-pied">Lire <Icone nom="fleche" taille={18} /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero-eng {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: var(--sx-space-7) var(--sx-space-9);
+    border-bottom: 1px solid var(--sx-border);
+  }
+  .hero-eng::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(120% 90% at 50% 0%, transparent 40%, var(--sx-bg) 100%);
+  }
+  .halo {
+    position: absolute;
+    top: -30%;
+    right: -15%;
+    width: 760px;
+    height: 760px;
+    z-index: -2;
+    background: radial-gradient(closest-side, var(--sx-glow), transparent);
+  }
+  .fil {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sx-space-2);
+    font-size: var(--sx-fs-sm);
+    color: var(--sx-text-muted);
+    margin-bottom: var(--sx-space-8);
+  }
+  .fil a {
+    color: var(--sx-text-muted);
+  }
+  .pastille {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--sx-radius-md);
+    border: 1px solid var(--sx-border);
+    background: var(--sx-surface);
+    margin-bottom: var(--sx-space-6);
+    box-shadow: 0 0 0 8px var(--sx-glow);
+  }
+  .pastille::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--sx-coral);
+  }
+  h1 {
+    max-width: 16ch;
+    margin-bottom: var(--sx-space-5);
+  }
+  .corps {
+    max-width: 760px;
+  }
+  .corps :global(h2) {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sx-space-3);
+  }
+  .corps :global(h2 .n) {
+    font-size: var(--sx-fs-sm);
+    font-weight: 500;
+    color: var(--sx-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .corps :global(.encadre) {
+    margin: var(--sx-space-7) 0 0;
+    padding: var(--sx-space-5) var(--sx-space-6);
+    border-left: 3px solid var(--sx-coral);
+    background: var(--sx-surface);
+    border-radius: 0 var(--sx-radius-md) var(--sx-radius-md) 0;
+  }
+  .corps :global(.encadre p:last-child) {
+    margin-bottom: 0;
+  }
+  .autres {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--sx-space-4);
+  }
+  @media (min-width: 720px) {
+    .autres {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .autres li {
+    display: grid;
+  }
+  .autre {
+    display: grid;
+    gap: var(--sx-space-3);
+    color: var(--sx-text);
+    text-decoration: none;
+    transition: border-color var(--sx-dur) var(--sx-ease), transform var(--sx-dur) var(--sx-ease);
+  }
+  .autre:hover {
+    border-color: var(--sx-on-band-muted);
+    transform: translateY(-3px);
+  }
+  .autre-nom {
+    font-size: var(--sx-fs-xl);
+    font-weight: 700;
+    letter-spacing: var(--sx-tracking-heading);
+  }
+  .autre-pied {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sx-space-2);
+    font-weight: 500;
+    margin-top: var(--sx-space-3);
+  }
+</style>

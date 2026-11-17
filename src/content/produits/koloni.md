@@ -6,6 +6,7 @@ titreSeo: "Koloni, logiciel de gestion des accueils collectifs de mineurs"
 categorie: "Gestion des accueils de loisirs et séjours"
 statut: "en ligne"
 url: "https://koloni.fr"
+github: "https://github.com/Koloni-fr"
 depuis: "2025"
 plateformes: ["Web", "Espace familles", "App du personnel"]
 points:

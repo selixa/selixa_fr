@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Icone from '../components/Icone.astro';
-import { briques } from '../data/socle';
+import { engagements } from '../data/engagements';
 
 const produits = (await getCollection('produits', ({ data }) => !data.brouillon)).sort(
   (a, b) => a.data.ordre - b.data.ordre
@@ -53,8 +53,8 @@ const listeProduits = {
         </h1>
         <p class="lead" data-reveal style="--i: 2">
           Selixacorp conçoit, développe et fait vivre des applications web et mobiles qui
-          enlèvent l'administratif du chemin. Un socle technique commun, plusieurs produits,
-          une même exigence de simplicité.
+          enlèvent l'administratif du chemin. Plusieurs produits, une même exigence de
+          simplicité, de sobriété et d'indépendance.
         </p>
         <div class="hero-actions" data-reveal style="--i: 3">
           <a class="sx-btn" href="#produits">
@@ -84,8 +84,8 @@ const listeProduits = {
         <p class="eyebrow" data-reveal>Produits</p>
         <h2 data-reveal style="--i: 1">Ce que nous éditons</h2>
         <p class="lead" data-reveal style="--i: 2">
-          Chaque produit répond à un métier précis. Tous partagent le même socle : traduction,
-          support, documents et pilotage.
+          Chaque produit répond à un métier précis, avec la même façon de faire : simple à
+          prendre en main, sobre, et pensé avec celles et ceux qui l'utilisent.
         </p>
       </div>
 
@@ -118,7 +118,7 @@ const listeProduits = {
             </span>
             <span class="carte-nom">Le prochain</span>
             <span class="carte-accroche">
-              D'autres produits sont en préparation sur le même socle. Un métier qui mériterait
+              D'autres produits sont en préparation. Un métier qui mériterait
               mieux que des tableurs ? Parlons-en.
             </span>
             <a class="carte-pied" href="#contact">
@@ -130,27 +130,31 @@ const listeProduits = {
     </div>
   </section>
 
-  <!-- SOCLE -->
-  <section class="section bande trame" id="socle">
+  <!-- ENGAGEMENTS -->
+  <section class="section bande trame" id="engagements">
     <div class="sx-container">
       <div class="section-tete">
-        <p class="eyebrow" data-reveal>Le socle</p>
-        <h2 data-reveal style="--i: 1">Une infrastructure commune, construite en interne</h2>
+        <p class="eyebrow" data-reveal>Engagements</p>
+        <h2 data-reveal style="--i: 1">Ce qui guide nos choix</h2>
         <p class="lead" data-reveal style="--i: 2">
-          Plutôt que de réinventer les mêmes briques pour chaque produit, nous les avons
-          mutualisées. Chaque amélioration profite à tous les produits à la fois.
+          Une petite structure a l'avantage de pouvoir choisir ses outils et ses méthodes.
+          Voici les nôtres, détaillés sans langue de bois.
         </p>
       </div>
       <ul class="briques">
         {
-          briques.map((b, i) => (
-            <li class="sx-card brique" data-reveal style={`--i: ${i}`}>
-              <span class="brique-icone">
-                <Icone nom={b.icone} taille={26} />
-              </span>
-              <h3>{b.nom}</h3>
-              <p class="brique-role">{b.role}</p>
-              <p class="muted">{b.texte}</p>
+          engagements.map((e, i) => (
+            <li data-reveal style={`--i: ${i}`}>
+              <a class="sx-card brique" href={`/engagements/${e.slug}/`}>
+                <span class="brique-icone">
+                  <Icone nom={e.icone} taille={26} />
+                </span>
+                <h3>{e.titre}</h3>
+                <p class="muted">{e.court}</p>
+                <span class="brique-pied">
+                  Lire <Icone nom="fleche" taille={18} />
+                </span>
+              </a>
             </li>
           ))
         }
@@ -454,7 +458,7 @@ const listeProduits = {
     background: transparent;
   }
 
-  /* ---------- Socle ---------- */
+  /* ---------- Engagements ---------- */
   .briques {
     gap: var(--sx-space-4);
   }
@@ -463,14 +467,17 @@ const listeProduits = {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 960px) {
     .briques {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
     }
   }
-  .brique {
+  .briques > li {
     display: grid;
-    align-content: start;
+  }
+  .brique {
+    display: flex;
+    flex-direction: column;
     gap: var(--sx-space-3);
     backdrop-filter: blur(6px);
     transition: border-color var(--sx-dur) var(--sx-ease), transform var(--sx-dur) var(--sx-ease);
@@ -480,6 +487,7 @@ const listeProduits = {
     transform: translateY(-3px);
   }
   .brique-icone {
+    align-self: flex-start;
     display: inline-grid;
     place-items: center;
     width: 52px;
@@ -499,11 +507,24 @@ const listeProduits = {
     border-radius: 50%;
     background: var(--sx-coral);
   }
-  .brique-role {
-    font-size: var(--sx-fs-xs);
+  .brique {
+    color: var(--sx-text);
+    text-decoration: none;
+  }
+  .brique-pied :global(.fleche) {
+    transition: transform var(--sx-dur) var(--sx-ease);
+  }
+  .brique:hover .brique-pied :global(.fleche) {
+    transform: translateX(4px);
+  }
+  .brique-pied {
+    margin-top: auto;
+    padding-top: var(--sx-space-4);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sx-space-2);
     font-weight: 500;
-    letter-spacing: 0.08em;
-    color: var(--sx-text-muted);
+    min-height: 48px;
   }
 
   /* ---------- Approche ---------- */

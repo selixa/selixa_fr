@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import { engagements } from '../data/engagements';
 import police500 from '../../design-system/fonts/space-grotesk-latin-500-normal.woff2?url';
 import police700 from '../../design-system/fonts/space-grotesk-latin-700-normal.woff2?url';
 
@@ -35,12 +36,11 @@ const organisation = {
   identifier: { '@type': 'PropertyValue', propertyID: 'SIREN', value: '945174969' },
   url: Astro.site?.toString(),
   logo: new URL('/brand/png/favicon-192.png', Astro.site).toString(),
-  // sameAs: ['[À COMPLÉTER] LinkedIn, GitHub…'],
 };
 
 const nav = [
   { href: '/#produits', label: 'Produits' },
-  { href: '/#socle', label: 'Le socle' },
+  { href: '/#engagements', label: 'Engagements' },
   { href: '/#approche', label: 'Approche' },
 ];
 ---
@@ -146,6 +146,12 @@ const nav = [
             <li><a href="/produits/koloni/">Koloni</a></li>
             <li><a href="/produits/bonjour-guide/">bonjour.guide</a></li>
             <li><a href="/produits/freat/">Freat</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="pied-titre">Engagements</p>
+          <ul>
+            {engagements.map((e) => <li><a href={`/engagements/${e.slug}/`}>{e.titre}</a></li>)}
           </ul>
         </div>
         <div>
@@ -284,7 +290,7 @@ const nav = [
       }
       @media (min-width: 768px) {
         .pied-grille {
-          grid-template-columns: 2fr 1fr 1fr;
+          grid-template-columns: 2fr 1fr 1fr 1fr;
         }
       }
       .pied-marque {

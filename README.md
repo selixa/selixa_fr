@@ -42,7 +42,13 @@ Le nom du fichier devient l'URL `/produits/mon-produit/`. La fiche reçoit autom
 données structurées `SoftwareApplication`, le fil d'Ariane et les liens vers les autres produits.
 Un produit `en préparation` permet d'annoncer un projet avant son lancement.
 
-Les briques techniques communes (section « Le socle ») sont dans `src/data/socle.ts`.
+Champ facultatif `github` : lien vers le code public, affiché sur la fiche.
+
+## Engagements
+
+Trois pages dans `src/pages/engagements/` (écologie, intelligence artificielle, indépendance
+numérique), sur le gabarit `src/layouts/Engagement.astro`. La liste (accueil, pied de page,
+liens croisés) est dans `src/data/engagements.ts`.
 
 ## Design system
 

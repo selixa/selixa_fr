@@ -1,0 +1,59 @@
+---
+import Engagement from '../../layouts/Engagement.astro';
+---
+
+<Engagement
+  slug="independance-numerique"
+  titreSeo="Indépendance numérique : open source, auto-hébergement et outils européens"
+  description="Logiciels libres, auto-hébergement, prestataires européens : les choix de Selixacorp pour rester indépendante, et la transparence sur les exceptions."
+  titre="Indépendance numérique : choisir ses dépendances."
+  lead="Aucun logiciel ne se construit seul. Mais on peut choisir de qui l'on dépend. Nous privilégions les logiciels libres, ce que nous pouvons héberger nous-mêmes, et les acteurs européens."
+>
+  <h2><span class="n">01</span> Bâtis sur du logiciel libre</h2>
+  <p>
+    Nos produits reposent sur des briques open source éprouvées : la base de données
+    PostgreSQL, Supabase, les frameworks Vue et Astro, Hono pour nos API. Si un fournisseur
+    disparaissait demain, le code et les données resteraient utilisables ailleurs.
+  </p>
+
+  <h2><span class="n">02</span> Auto-héberger ce qui compte</h2>
+  <p>Plutôt que de louer un service pour tout, nous hébergeons nous-mêmes plusieurs outils clés :</p>
+  <ul>
+    <li><strong>La mesure d'audience</strong>, avec Matomo, sans cookie et sans revente de données.</li>
+    <li><strong>La génération de documents PDF</strong> (factures, devis, attestations), sur un moteur libre.</li>
+    <li><strong>La traduction automatique</strong>, avec des modèles ouverts qui tournent sur nos machines.</li>
+  </ul>
+  <p>Nos polices de caractères sont servies avec nos sites : aucun appel à Google Fonts.</p>
+
+  <h2><span class="n">03</span> L'Europe en priorité</h2>
+  <ul>
+    <li>
+      <strong>Hébergement des données en France</strong> pour Koloni : la base de données est
+      située dans la région de Paris.
+    </li>
+    <li><strong>Paiements en ligne</strong> avec Stancer, un prestataire de paiement français.</li>
+    <li><strong>Envoi de SMS</strong> avec OVHcloud, un hébergeur français.</li>
+  </ul>
+
+  <h2><span class="n">04</span> Transparents sur les exceptions</h2>
+  <p>
+    L'indépendance totale n'existe pas, et nous préférons le reconnaître. Certains services
+    que nous utilisons sont édités par des sociétés non européennes, quand nous n'avons pas
+    encore trouvé d'équivalent à la hauteur. C'est le cas de Cloudflare, qui sert nos sites, de
+    Resend, qui envoie certains de nos e-mails, et de Supabase, dont la base de données de Koloni
+    est hébergée chez Amazon Web Services, dans sa région de Paris : les données restent en
+    France, mais le prestataire est américain.
+  </p>
+  <p>
+    Ces choix sont réévalués régulièrement. Dès qu'une alternative européenne ou libre tient
+    la route, nous migrons.
+  </p>
+
+  <div class="encadre">
+    <p>
+      <strong>Vos données restent les vôtres.</strong> Nous concevons nos produits pour que
+      vous puissiez récupérer vos données dans des formats ouverts. Personne ne devrait rester
+      client d'un logiciel parce qu'il ne peut pas en partir.
+    </p>
+  </div>
+</Engagement>

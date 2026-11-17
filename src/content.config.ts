@@ -14,6 +14,8 @@ const produits = defineCollection({
     categorie: z.string(),
     statut: z.enum(['en ligne', 'bêta', 'en préparation']),
     url: z.string().url().optional(),
+    /** Organisation ou dépôt de code public, affiché sur la fiche. */
+    github: z.string().url().optional(),
     depuis: z.string().optional(),
     plateformes: z.array(z.string()).default([]),
     /** Trois ou quatre bénéfices courts. */
