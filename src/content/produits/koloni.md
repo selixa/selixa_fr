@@ -12,7 +12,11 @@ video:
   titre: "Koloni en 60 secondes"
 statut: "en ligne"
 url: "https://koloni.fr"
-github: "https://github.com/Koloni-fr"
+liens:
+  # linkedin: "https://www.linkedin.com/company/…"
+  # instagram: "https://www.instagram.com/…"
+  playStore: "bientôt"
+  appStore: "bientôt"
 depuis: "2025"
 plateformes: ["Web", "Espace familles", "App du personnel"]
 points:

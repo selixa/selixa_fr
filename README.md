@@ -42,7 +42,8 @@ Le nom du fichier devient l'URL `/produits/mon-produit/`. La fiche reçoit autom
 données structurées `SoftwareApplication`, le fil d'Ariane et les liens vers les autres produits.
 Un produit `en préparation` permet d'annoncer un projet avant son lancement.
 
-Champ facultatif `github` : lien vers le code public, affiché sur la fiche.
+Champ facultatif `liens` (`linkedin`, `instagram`, `playStore`, `appStore`) : icônes affichées sur la
+fiche avec le site du produit (`url`). Pour un store, `"bientôt"` affiche l'icône grisée, sans lien.
 
 ## Engagements
 

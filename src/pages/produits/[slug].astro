@@ -18,6 +18,25 @@ const { produit, autres } = Astro.props;
 const { Content } = await render(produit);
 const d = produit.data;
 
+const L = d.liens;
+const reseaux = [L.linkedin, L.instagram].filter(Boolean) as string[];
+const icones = [
+  d.url && { nom: 'web', label: `Site de ${d.nom}`, href: d.url },
+  L.linkedin && { nom: 'linkedin', label: `${d.nom} sur LinkedIn`, href: L.linkedin },
+  L.instagram && { nom: 'instagram', label: `${d.nom} sur Instagram`, href: L.instagram },
+  L.playStore && {
+    nom: 'playstore',
+    label: L.playStore === 'bientôt' ? 'Bientôt sur Google Play' : `${d.nom} sur Google Play`,
+    href: L.playStore === 'bientôt' ? undefined : L.playStore,
+  },
+  L.appStore && {
+    nom: 'appstore',
+    label: L.appStore === 'bientôt' ? "Bientôt sur l'App Store" : `${d.nom} sur l'App Store`,
+    href: L.appStore === 'bientôt' ? undefined : L.appStore,
+  },
+].filter(Boolean) as { nom: 'web' | 'linkedin' | 'instagram' | 'playstore' | 'appstore'; label: string; href?: string }[];
+const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
+
 const application = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -26,7 +45,7 @@ const application = {
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   ...(d.url && { url: d.url }),
-  ...(d.github && { sameAs: [d.github] }),
+  ...(reseaux.length > 0 && { sameAs: reseaux }),
   publisher: { '@id': `${Astro.site}#organisation` },
 };
 const video = d.video && {
@@ -48,7 +67,6 @@ const fil = {
     { '@type': 'ListItem', position: 3, name: d.nom },
   ],
 };
-const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
 ---
 
 <Base titre={d.titreSeo} description={d.description} jsonld={[application, fil, ...(video ? [video] : [])]}>
@@ -114,18 +132,32 @@ const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
             <dd>{d.plateformes.join(' · ')}</dd>
           </div>
         )}
-        {d.github && (
-          <div>
-            <dt>Code</dt>
-            <dd>
-              <a href={d.github} rel="noopener">{d.github.replace(/^https:\/\//, '')}</a>
-            </dd>
-          </div>
-        )}
         <div>
           <dt>Éditeur</dt>
           <dd>Selixacorp</dd>
         </div>
+        {icones.length > 0 && (
+          <div>
+            <dt>Retrouver {d.nom}</dt>
+            <dd>
+              <ul class="icones">
+                {icones.map((ic) => (
+                  <li>
+                    {ic.href ? (
+                      <a class="icone-lien" href={ic.href} rel="noopener" aria-label={ic.label} title={ic.label}>
+                        <Icone nom={ic.nom} taille={20} />
+                      </a>
+                    ) : (
+                      <span class="icone-lien bientot" role="img" aria-label={ic.label} title={ic.label}>
+                        <Icone nom={ic.nom} taille={20} />
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        )}
       </dl>
     </div>
   </section>
@@ -220,6 +252,33 @@ const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
     align-items: center;
     gap: var(--sx-space-4);
     margin-bottom: var(--sx-space-5);
+  }
+  .icones {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sx-space-2);
+  }
+  .icone-lien {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--sx-radius-pill);
+    color: var(--sx-text);
+    box-shadow: inset 0 0 0 2px var(--sx-border);
+    transition: box-shadow var(--sx-dur) var(--sx-ease), transform var(--sx-dur) var(--sx-ease);
+  }
+  a.icone-lien:hover {
+    box-shadow: inset 0 0 0 2px var(--sx-ring);
+    transform: translateY(-2px);
+  }
+  .bientot {
+    color: var(--sx-text-muted);
+    opacity: 0.45;
+    cursor: not-allowed;
   }
   .hero-grille {
     display: grid;

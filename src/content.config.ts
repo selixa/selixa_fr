@@ -25,8 +25,18 @@ const produits = defineCollection({
       })
       .optional(),
     url: z.string().url().optional(),
-    /** Organisation ou dépôt de code public, affiché sur la fiche. */
-    github: z.string().url().optional(),
+    /**
+     * Liens affichés en icônes sur la fiche. Une icône n'apparaît que si le lien est renseigné.
+     * Stores : une URL, ou 'bientôt' pour une icône grisée sans lien.
+     */
+    liens: z
+      .object({
+        linkedin: z.string().url().optional(),
+        instagram: z.string().url().optional(),
+        playStore: z.union([z.string().url(), z.literal('bientôt')]).optional(),
+        appStore: z.union([z.string().url(), z.literal('bientôt')]).optional(),
+      })
+      .default({}),
     depuis: z.string().optional(),
     plateformes: z.array(z.string()).default([]),
     /** Trois ou quatre bénéfices courts. */

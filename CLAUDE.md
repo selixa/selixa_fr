@@ -11,7 +11,7 @@ Site statique Astro (aucun framework JS côté client), déployé sur Cloudflare
 ## Contenu
 - Produits : `src/content/produits/*.md` (schéma dans `src/content.config.ts`). Le Grenier du Curé n'est volontairement pas présenté pour l'instant.
 - Pages d'engagements (écologie, IA, indépendance numérique) : `src/pages/engagements/`, gabarit `src/layouts/Engagement.astro`, liste dans `src/data/engagements.ts`. Ne pas y décrire les briques internes (translate-hub, support-hub, pdf-api, cockpit) : Alexis ne veut pas les exposer.
-- Seule la fiche Koloni affiche un lien GitHub (`github` dans le front matter). Pas de réseaux sociaux pour l'instant.
+- Pas de lien GitHub. Les fiches affichent une rangée d'icônes (site, LinkedIn, Instagram, Google Play, App Store) selon `url` et `liens` ; store `"bientôt"` = icône grisée. Pas de réseaux sociaux pour Selixacorp elle-même pour l'instant.
 - Ne pas inventer de chiffres, témoignages, logos clients ni informations légales : mettre `[À COMPLÉTER]`.
 - Rédaction : vouvoiement, typographie française, pas d'emoji.
 
