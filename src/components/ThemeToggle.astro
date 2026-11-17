@@ -1,41 +1,43 @@
 ---
+import Icone from './Icone.astro';
 ---
 
-<button id="theme-toggle" type="button" aria-label="Changer de thème">
-  <span data-when="light">clair</span>
-  <span data-when="dark">sombre</span>
+<button id="theme-toggle" type="button" aria-label="Basculer entre thème clair et sombre">
+  <span data-when="light"><Icone nom="lune" taille={20} /></span>
+  <span data-when="dark"><Icone nom="soleil" taille={20} /></span>
 </button>
 
 <style>
   button {
-    font-family: var(--mono);
-    font-size: 0.6875rem;
-    color: var(--muted);
-    background: none;
-    border: 1px solid var(--rule);
-    border-radius: 3px;
-    padding: 0.2rem 0.5rem;
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--sx-radius-pill);
+    border: 0;
+    background: transparent;
+    color: var(--sx-text);
+    box-shadow: inset 0 0 0 2px var(--sx-border);
     cursor: pointer;
-    line-height: 1.4;
+    transition: box-shadow var(--sx-dur) var(--sx-ease), transform var(--sx-dur) var(--sx-ease);
   }
   button:hover {
-    color: var(--text);
-    border-color: var(--rule-strong);
+    box-shadow: inset 0 0 0 2px var(--sx-ring);
+    transform: rotate(-12deg);
   }
   [data-when] {
     display: none;
   }
   :global(html[data-theme='light']) [data-when='light'],
   :global(html[data-theme='dark']) [data-when='dark'] {
-    display: inline;
+    display: contents;
   }
 </style>
 
 <script>
   const btn = document.getElementById('theme-toggle');
   btn?.addEventListener('click', () => {
-    const next =
-      document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
     localStorage.setItem('theme', next);
   });

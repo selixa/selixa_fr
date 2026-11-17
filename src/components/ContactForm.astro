@@ -2,23 +2,25 @@
 ---
 
 <form id="contact-form" novalidate>
-  <div class="champ">
-    <label for="nom">nom</label>
-    <input id="nom" name="nom" type="text" required autocomplete="name" />
+  <div class="duo">
+    <div class="champ">
+      <label for="nom">Nom</label>
+      <input id="nom" name="nom" type="text" required autocomplete="name" />
+    </div>
+    <div class="champ">
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder="prenom@exemple.fr"
+      />
+    </div>
   </div>
   <div class="champ">
-    <label for="email">email</label>
-    <input
-      id="email"
-      name="email"
-      type="email"
-      required
-      autocomplete="email"
-      placeholder="prenom@exemple.fr"
-    />
-  </div>
-  <div class="champ">
-    <label for="message">message</label>
+    <label for="message">Message</label>
     <textarea id="message" name="message" rows="5" required></textarea>
   </div>
 
@@ -28,7 +30,7 @@
   </div>
 
   <div class="pied">
-    <button type="submit">Envoyer le message</button>
+    <button class="sx-btn" type="submit">Envoyer le message</button>
     <p id="statut" role="status"></p>
   </div>
 </form>
@@ -36,35 +38,50 @@
 <style>
   form {
     display: grid;
-    gap: 1rem;
-    max-width: 34rem;
+    gap: var(--sx-space-5);
+  }
+  .duo {
+    display: grid;
+    gap: var(--sx-space-5);
+  }
+  @media (min-width: 640px) {
+    .duo {
+      grid-template-columns: 1fr 1fr;
+    }
   }
   .champ {
     display: grid;
-    gap: 0.35rem;
+    gap: var(--sx-space-2);
   }
   label {
-    font-size: 0.6875rem;
-    color: var(--faint);
+    font-size: var(--sx-fs-sm);
+    font-weight: 500;
   }
   input,
   textarea {
-    font-family: var(--mono);
-    font-size: 0.8125rem;
-    color: var(--text);
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 3px;
-    padding: 0.5rem 0.65rem;
+    font: inherit;
+    color: var(--sx-text);
+    background: var(--sx-surface);
+    border: 1px solid var(--sx-border);
+    border-radius: var(--sx-radius-md);
+    padding: var(--sx-space-3) var(--sx-space-4);
+    min-height: 48px;
     width: 100%;
     resize: vertical;
+    transition: border-color var(--sx-dur) var(--sx-ease), box-shadow var(--sx-dur) var(--sx-ease);
   }
   input:hover,
   textarea:hover {
-    border-color: var(--rule-strong);
+    border-color: var(--sx-ring);
+  }
+  input:focus-visible,
+  textarea:focus-visible {
+    border-color: var(--sx-focus);
+    box-shadow: 0 0 0 4px var(--sx-glow);
+    outline: none;
   }
   input::placeholder {
-    color: var(--faint);
+    color: var(--sx-text-muted);
   }
   .piege {
     position: absolute;
@@ -73,33 +90,21 @@
   .pied {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
+    gap: var(--sx-space-5);
     flex-wrap: wrap;
   }
-  button {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--text);
-    background: none;
-    border: 1px solid var(--rule-strong);
-    border-radius: 3px;
-    padding: 0.45rem 0.9rem;
-    cursor: pointer;
-  }
-  button:hover {
-    background: var(--surface);
-  }
   button[disabled] {
-    color: var(--faint);
+    opacity: 0.6;
     cursor: progress;
   }
   #statut {
     margin: 0;
-    font-size: 0.6875rem;
-    color: var(--muted);
+    font-size: var(--sx-fs-sm);
+    color: var(--sx-text-muted);
   }
   #statut[data-etat='erreur'] {
-    color: var(--accent);
+    color: var(--sx-text);
+    font-weight: 500;
   }
 </style>
 
@@ -134,9 +139,9 @@
       });
       if (!res.ok) throw new Error(String(res.status));
       form.reset();
-      dire('Message envoyé. Réponse sous 48 h.');
+      dire('Message envoyé. Nous vous répondons sous 48 h.');
     } catch {
-      dire('L\u2019envoi a échoué. Écris directement à alexis@thomas.bz.', 'erreur');
+      dire('L\u2019envoi a échoué. Écrivez directement à alexis@thomas.bz.', 'erreur');
     } finally {
       bouton && (bouton.disabled = false);
     }

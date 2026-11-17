@@ -1,19 +1,45 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
-import EasterEgg from '../components/EasterEgg.astro';
+import police500 from '../../design-system/fonts/space-grotesk-latin-500-normal.woff2?url';
+import police700 from '../../design-system/fonts/space-grotesk-latin-700-normal.woff2?url';
 
 interface Props {
-  titre: string;
+  /** Titre de la page, sans le suffixe « | Selixacorp ». */
+  titre?: string;
   description?: string;
+  /** Données structurées supplémentaires (JSON-LD). */
+  jsonld?: Record<string, unknown>[];
+  noindex?: boolean;
 }
 
 const {
   titre,
-  description = 'Alexis — je construis des outils pour des gens qui gèrent des enfants.',
+  description = "Selixacorp conçoit et édite des logiciels simples pour des métiers concrets : Koloni, bonjour.guide, Freat, et les prochains.",
+  jsonld = [],
+  noindex = false,
 } = Astro.props;
 
-const build = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+const titreComplet = titre ? `${titre} | Selixacorp` : 'Selixacorp, éditeur de logiciels';
+const canonique = new URL(Astro.url.pathname, Astro.site);
+const image = new URL('/brand/og.png', Astro.site);
+const annee = new Date().getFullYear();
+
+const organisation = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${Astro.site}#organisation`,
+  name: 'Selixacorp',
+  url: Astro.site?.toString(),
+  logo: new URL('/brand/png/favicon-192.png', Astro.site).toString(),
+  // sameAs: ['[À COMPLÉTER] LinkedIn, GitHub…'],
+};
+
+const nav = [
+  { href: '/#produits', label: 'Produits' },
+  { href: '/#socle', label: 'Le socle' },
+  { href: '/#approche', label: 'Approche' },
+];
 ---
 
 <!doctype html>
@@ -21,111 +47,272 @@ const build = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{titre}</title>
+    <title>{titreComplet}</title>
     <meta name="description" content={description} />
-    <meta property="og:title" content={titre} />
-    <meta property="og:description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonique} />
+
     <meta property="og:type" content="website" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:site_name" content="Selixacorp" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:title" content={titreComplet} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonique} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" type="image/svg+xml" href="/brand/logos/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/png/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/brand/png/apple-touch-icon-180.png" />
+    <meta name="theme-color" content="#14163A" />
+    <link rel="preload" href={police500} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={police700} as="font" type="font/woff2" crossorigin />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
     <script is:inline>
+      document.documentElement.classList.add('js');
       const stored = localStorage.getItem('theme');
       const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.dataset.theme =
-        stored ?? (prefersDark ? 'dark' : 'light');
+      document.documentElement.dataset.theme = stored ?? (prefersDark ? 'dark' : 'light');
     </script>
-{import.meta.env.PROD && (
-      <script is:inline>
-        var _paq = (window._paq = window._paq || []);
-        _paq.push(['disableCookies']);
-        _paq.push(['trackPageView']);
-        _paq.push(['enableLinkTracking']);
-        (function () {
-          var u = 'https://matomo.selixa.fr/';
-          _paq.push(['setTrackerUrl', u + 'matomo.php']);
-          _paq.push(['setSiteId', '6']);
-          var d = document,
-            g = d.createElement('script'),
-            s = d.getElementsByTagName('script')[0];
-          g.async = true;
-          g.src = u + 'matomo.js';
-          s.parentNode.insertBefore(g, s);
-        })();
-      </script>
-    )}
+
+    {
+      [organisation, ...jsonld].map((d) => (
+        <script type="application/ld+json" set:html={JSON.stringify(d)} />
+      ))
+    }
+
+    {
+      import.meta.env.PROD && (
+        <script is:inline>
+          var _paq = (window._paq = window._paq || []);
+          _paq.push(['disableCookies']);
+          _paq.push(['trackPageView']);
+          _paq.push(['enableLinkTracking']);
+          (function () {
+            var u = 'https://matomo.selixa.fr/';
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '6']);
+            var d = document,
+              g = d.createElement('script'),
+              s = d.getElementsByTagName('script')[0];
+            g.async = true;
+            g.src = u + 'matomo.js';
+            s.parentNode.insertBefore(g, s);
+          })();
+        </script>
+      )
+    }
   </head>
   <body>
     <a class="skip" href="#contenu">Aller au contenu</a>
-    <div class="shell">
-      <header>
-        <a href="/" class="marque" data-marque>selixa<span>.</span>fr</a>
-        <nav>
-          <a href="/#projets">projets</a>
-          <a href="/#outils">outils</a>
-          <a href="/#contact">contact</a>
-          <ThemeToggle />
+
+    <header class="entete">
+      <div class="sx-container barre">
+        <a href="/" class="marque" aria-label="Selixacorp, accueil">
+          <img class="logo logo-clair" src="/brand/logos/logo-horizontal.svg" alt="" width="135" height="32" />
+          <img class="logo logo-sombre" src="/brand/logos/logo-horizontal-dark.svg" alt="" width="135" height="32" />
+        </a>
+        <nav aria-label="Navigation principale">
+          <ul>
+            {nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+          </ul>
         </nav>
-      </header>
+        <div class="actions">
+          <ThemeToggle />
+          <a class="sx-btn sx-btn--ghost cta" href="/#contact">Nous écrire</a>
+        </div>
+      </div>
+    </header>
 
-      <main id="contenu">
-        <slot />
-      </main>
+    <main id="contenu">
+      <slot />
+    </main>
 
-      <footer>
-        <span>build {build} · astro · cloudflare</span>
-        <span class="pique">fait à Lyon, sans framework JS côté client</span>
-      </footer>
-    </div>
+    <footer class="pied">
+      <div class="sx-container pied-grille">
+        <div class="pied-marque">
+          <img class="logo logo-sombre-toujours" src="/brand/logos/logo-horizontal-dark.svg" alt="Selixacorp" width="169" height="40" loading="lazy" />
+          <p>Éditeur de logiciels. Des logiciels conçus et développés en France.</p>
+        </div>
+        <div>
+          <p class="pied-titre">Produits</p>
+          <ul>
+            <li><a href="/produits/koloni/">Koloni</a></li>
+            <li><a href="/produits/bonjour-guide/">bonjour.guide</a></li>
+            <li><a href="/produits/freat/">Freat</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="pied-titre">Société</p>
+          <ul>
+            <li><a href="/#contact">Contact</a></li>
+            <li><a href="/mentions-legales/">Mentions légales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="sx-container pied-bas">
+        <span>© {annee} Selixacorp</span>
+        <span>SIREN [À COMPLÉTER]</span>
+      </div>
+    </footer>
 
-    <EasterEgg />
+    <script>
+      const cibles = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entrees) => {
+            for (const e of entrees) {
+              if (e.isIntersecting) {
+                e.target.classList.add('vu');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' }
+        );
+        cibles.forEach((c) => io.observe(c));
+      } else {
+        cibles.forEach((c) => c.classList.add('vu'));
+      }
+    </script>
 
     <style>
-      header {
+      .entete {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: var(--sx-glass-bg);
+        backdrop-filter: blur(var(--sx-glass-blur)) saturate(140%);
+        -webkit-backdrop-filter: blur(var(--sx-glass-blur)) saturate(140%);
+        border-bottom: 1px solid var(--sx-border);
+      }
+      .barre {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        padding: 1.75rem 0 0.7rem;
-        border-bottom: 1px solid var(--rule-strong);
+        gap: var(--sx-space-5);
+        min-height: 76px;
       }
       .marque {
-        font-size: 0.9375rem;
-        font-weight: 500;
-        letter-spacing: -0.02em;
-        color: var(--text);
-        border: 0;
+        display: inline-flex;
+        flex-shrink: 0;
       }
-      .marque span {
-        color: var(--accent);
+      .logo {
+        height: 32px;
+        width: auto;
+      }
+      :global(html[data-theme='light']) .logo-sombre,
+      :global(html[data-theme='dark']) .logo-clair {
+        display: none;
       }
       nav {
+        margin-inline: auto;
+      }
+      nav ul {
         display: flex;
-        align-items: center;
-        gap: 1rem;
-        font-size: 0.6875rem;
+        gap: var(--sx-space-2);
+        list-style: none;
+        margin: 0;
+        padding: 0;
       }
       nav a {
-        color: var(--muted);
+        display: inline-flex;
+        align-items: center;
+        min-height: 48px;
+        padding-inline: var(--sx-space-4);
+        border-radius: var(--sx-radius-pill);
+        color: var(--sx-text-muted);
+        font-weight: 500;
+        font-size: var(--sx-fs-sm);
+        text-decoration: none;
+        transition: color var(--sx-dur) var(--sx-ease), background var(--sx-dur) var(--sx-ease);
       }
       nav a:hover {
-        color: var(--text);
-        border-bottom-color: var(--rule-strong);
+        color: var(--sx-text);
+        background: var(--sx-surface);
       }
-      footer {
+      .actions {
         display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        flex-wrap: wrap;
-        border-top: 1px solid var(--rule-strong);
-        margin-top: 0.5rem;
-        padding: 0.75rem 0 2.5rem;
-        font-size: 0.625rem;
-        color: var(--faint);
+        align-items: center;
+        gap: var(--sx-space-3);
+        margin-left: auto;
       }
-      @media (max-width: 34rem) {
-        .pique {
+      nav + .actions {
+        margin-left: 0;
+      }
+      @media (max-width: 860px) {
+        nav {
           display: none;
         }
+        .actions {
+          margin-left: auto !important;
+        }
+      }
+      @media (max-width: 420px) {
+        .logo {
+          height: 28px;
+        }
+        .cta {
+          padding-inline: var(--sx-space-4);
+        }
+      }
+
+      .pied {
+        background: var(--sx-indigo-night);
+        color: var(--sx-on-band-muted);
+        padding-block: var(--sx-space-8) var(--sx-space-6);
+        font-size: var(--sx-fs-sm);
+      }
+      .pied a {
+        color: var(--sx-on-band);
+        text-decoration: none;
+      }
+      .pied a:hover {
+        text-decoration: underline;
+      }
+      .pied :focus-visible {
+        outline-color: var(--sx-on-band);
+      }
+      .pied-grille {
+        display: grid;
+        gap: var(--sx-space-7);
+      }
+      @media (min-width: 768px) {
+        .pied-grille {
+          grid-template-columns: 2fr 1fr 1fr;
+        }
+      }
+      .pied-marque {
+        display: grid;
+        gap: var(--sx-space-4);
+        max-width: 36ch;
+      }
+      .pied-marque .logo {
+        height: 40px;
+      }
+      .pied-titre {
+        color: var(--sx-on-band);
+        font-weight: 500;
+        margin-bottom: var(--sx-space-3);
+      }
+      .pied ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: var(--sx-space-2);
+      }
+      .pied-bas {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--sx-space-3);
+        margin-top: var(--sx-space-8);
+        padding-top: var(--sx-space-5);
+        border-top: 1px solid var(--sx-band-border);
+        font-size: var(--sx-fs-xs);
       }
     </style>
   </body>

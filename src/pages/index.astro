@@ -2,339 +2,565 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { blocs } from '../data/outils';
+import Icone from '../components/Icone.astro';
+import { briques } from '../data/socle';
 
-const projets = (await getCollection('projets', ({ data }) => !data.brouillon)).sort(
+const produits = (await getCollection('produits', ({ data }) => !data.brouillon)).sort(
   (a, b) => a.data.ordre - b.data.ordre
 );
+const enLigne = produits.filter((p) => p.data.statut !== 'en préparation');
+
+const principes = [
+  {
+    titre: 'Conçus avec les métiers',
+    texte:
+      "Chaque produit part d'un terrain connu de l'intérieur : la direction d'accueils de mineurs, la location saisonnière, le travail nomade. On résout les vrais irritants, pas ceux d'un cahier des charges.",
+  },
+  {
+    titre: 'Simples à prendre en main',
+    texte:
+      "Si vous savez remplir un formulaire, vous savez utiliser nos outils. Pas de formation obligatoire, pas de jargon, pas d'options cachées.",
+  },
+  {
+    titre: 'Sobres avec vos données',
+    texte:
+      "Nous ne collectons que le nécessaire. La mesure d'audience se fait sans cookie, et les données sensibles, comme celles des mineurs, sont protégées par défaut.",
+  },
+];
+
+const listeProduits = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Produits Selixacorp',
+  itemListElement: produits.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: new URL(`/produits/${p.id}/`, Astro.site).toString(),
+    name: p.data.nom,
+  })),
+};
 ---
 
-<Base titre="selixa.fr — Alexis">
-  <section class="section hero">
-    <p class="eyebrow"><span class="sigil">~</span> whoami</p>
-    <h1>Je conçois et je livre des applications métier, seul, de la base de données à l'écran.</h1>
-    <p class="pitch">
-      Développeur produit à Lyon, spécialisé no-code et low-code. Je modélise le schéma
-      PostgreSQL, j'écris les fonctions serveur, je construis l'interface et je déploie.
-      Avant ça : Apple Retail, puis customer success — et une vingtaine de saisons en
-      direction d'accueils collectifs de mineurs, ce qui explique pour qui je conçois.
-    </p>
-    <ul class="tags">
-      <li>PostgreSQL</li>
-      <li>Supabase</li>
-      <li>WeWeb</li>
-      <li>FlutterFlow</li>
-      <li>Deno</li>
-      <li>Cloudflare</li>
-    </ul>
-  </section>
-
-  <section class="section" id="projets">
-    <p class="eyebrow"><span class="sigil">~</span> ls projets/</p>
-    <ul class="liste">
-      {
-        projets.map((p) => (
-          <li class="projet">
-            <div class="corps">
-              <div class="titre-ligne">
-                <a href={`/projets/${p.id}/`}>{p.data.titre}</a>
-                {p.data.statut && <span class="badge">{p.data.statut}</span>}
-              </div>
-              <p class="resume">{p.data.resume}</p>
-              <p class="meta">{[p.data.annee, ...p.data.stack].join(' · ')}</p>
-            </div>
-            {p.data.lien && (
-              <a class="externe" href={p.data.lien} rel="noopener">
-                {p.data.lienLabel ?? new URL(p.data.lien).hostname} ↗
-              </a>
-            )}
-          </li>
-        ))
-      }
-    </ul>
-  </section>
-
-  <section class="section" id="outils">
-    <p class="eyebrow"><span class="sigil">~</span> cat outils.txt</p>
-    {
-      blocs.map((bloc) => (
-        <div class="bloc">
-          <div class="bloc-tete">
-            <h2>{bloc.titre}</h2>
-            <span class="compte">{bloc.outils.length}</span>
-          </div>
-          <p class="intro">{bloc.intro}</p>
-          <ul class="catalogue">
-            {bloc.outils.map((o) => {
-              const cible = o.lienAffilie ?? o.lien;
-              const Balise = cible ? 'a' : 'div';
-              return (
-                <li>
-                  <Balise
-                    class="carte"
-                    href={cible}
-                    rel={
-                      cible
-                        ? o.lienAffilie
-                          ? 'noopener sponsored nofollow'
-                          : 'noopener'
-                        : undefined
-                    }
-                  >
-                    <span class="tete">
-                      {o.logo ? (
-                        <img
-                          class="logo"
-                          src={`/logos/${o.logo}.svg`}
-                          alt=""
-                          width="16"
-                          height="16"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <span class="monogramme" aria-hidden="true">
-                          {o.nom.slice(0, 2)}
-                        </span>
-                      )}
-                      <span class="nom">{o.nom}</span>
-                      {o.lienAffilie && <span class="aff">aff.</span>}
-                    </span>
-                    <span class="cat">{o.categorie}</span>
-                    <span class="note">{o.note}</span>
-                  </Balise>
-                </li>
-              );
-            })}
-          </ul>
+<Base jsonld={[listeProduits]}>
+  <!-- HERO -->
+  <section class="hero trame">
+    <div class="halo" aria-hidden="true"></div>
+    <div class="sx-container hero-grille">
+      <div class="hero-texte">
+        <p class="eyebrow" data-reveal>Éditeur de logiciels</p>
+        <h1 class="display" data-reveal style="--i: 1">
+          Des logiciels nets pour des métiers <span class="souligne">bien réels</span>.
+        </h1>
+        <p class="lead" data-reveal style="--i: 2">
+          Selixacorp conçoit, développe et fait vivre des applications web et mobiles qui
+          enlèvent l'administratif du chemin. Un socle technique commun, plusieurs produits,
+          une même exigence de simplicité.
+        </p>
+        <div class="hero-actions" data-reveal style="--i: 3">
+          <a class="sx-btn" href="#produits">
+            Découvrir nos produits <Icone nom="fleche" taille={18} />
+          </a>
         </div>
-      ))
-    }
-    <p class="mention">
-      Quelques liens de cette page sont des liens de parrainage, signalés par la mention
-      « aff. ». Ils ne changent rien à ce qui est écrit au-dessus — je n'y ai mis que des
-      outils que j'utilise pour de vrai.
-    </p>
+      </div>
+
+      <div class="orbite" aria-hidden="true" data-reveal style="--i: 2">
+        <div class="anneau anneau-1"></div>
+        <div class="anneau anneau-2"><span class="satellite"></span></div>
+        <div class="anneau anneau-3"><span class="satellite satellite-2"></span></div>
+        <img class="noyau" src="/brand/logos/icon-rounded.svg" alt="" width="112" height="112" />
+        {
+          enLigne.slice(0, 3).map((p, i) => (
+            <span class={`etiquette etiquette-${i + 1}`}>{p.data.nom}</span>
+          ))
+        }
+      </div>
+    </div>
   </section>
 
+  <!-- PRODUITS -->
+  <section class="section" id="produits">
+    <div class="sx-container">
+      <div class="section-tete">
+        <p class="eyebrow" data-reveal>Produits</p>
+        <h2 data-reveal style="--i: 1">Ce que nous éditons</h2>
+        <p class="lead" data-reveal style="--i: 2">
+          Chaque produit répond à un métier précis. Tous partagent le même socle : traduction,
+          support, documents et pilotage.
+        </p>
+      </div>
+
+      <ul class="produits">
+        {
+          produits.map((p, i) => (
+            <li data-reveal style={`--i: ${i}`}>
+              <a class="sx-card carte" href={`/produits/${p.id}/`}>
+                <span class="carte-haut">
+                  <span class="numero">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="badge" data-statut={p.data.statut}>
+                    {p.data.statut}
+                  </span>
+                </span>
+                <span class="carte-nom">{p.data.nom}</span>
+                <span class="carte-cat">{p.data.categorie}</span>
+                <span class="carte-accroche">{p.data.accroche}</span>
+                <span class="carte-pied">
+                  En savoir plus <Icone nom="fleche" taille={18} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+        <li data-reveal style={`--i: ${produits.length}`}>
+          <div class="carte carte-suivante">
+            <span class="carte-haut">
+              <span class="numero">{String(produits.length + 1).padStart(2, '0')}</span>
+              <span class="badge">en préparation</span>
+            </span>
+            <span class="carte-nom">Le prochain</span>
+            <span class="carte-accroche">
+              D'autres produits sont en préparation sur le même socle. Un métier qui mériterait
+              mieux que des tableurs ? Parlons-en.
+            </span>
+            <a class="carte-pied" href="#contact">
+              Nous écrire <Icone nom="fleche" taille={18} />
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SOCLE -->
+  <section class="section bande trame" id="socle">
+    <div class="sx-container">
+      <div class="section-tete">
+        <p class="eyebrow" data-reveal>Le socle</p>
+        <h2 data-reveal style="--i: 1">Une infrastructure commune, construite en interne</h2>
+        <p class="lead" data-reveal style="--i: 2">
+          Plutôt que de réinventer les mêmes briques pour chaque produit, nous les avons
+          mutualisées. Chaque amélioration profite à tous les produits à la fois.
+        </p>
+      </div>
+      <ul class="briques">
+        {
+          briques.map((b, i) => (
+            <li class="sx-card brique" data-reveal style={`--i: ${i}`}>
+              <span class="brique-icone">
+                <Icone nom={b.icone} taille={26} />
+              </span>
+              <h3>{b.nom}</h3>
+              <p class="brique-role">{b.role}</p>
+              <p class="muted">{b.texte}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- APPROCHE -->
+  <section class="section" id="approche">
+    <div class="sx-container">
+      <div class="section-tete">
+        <p class="eyebrow" data-reveal>Approche</p>
+        <h2 data-reveal style="--i: 1">Trois principes, sur chaque produit</h2>
+      </div>
+      <ol class="principes">
+        {
+          principes.map((pr, i) => (
+            <li data-reveal style={`--i: ${i}`}>
+              <span class="principe-num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{pr.titre}</h3>
+              <p class="muted">{pr.texte}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
   <section class="section contact" id="contact">
-    <p class="eyebrow"><span class="sigil">~</span> mail -s "bonjour"</p>
-    <p class="intro intro-seule">
-      Une mission, une question sur un stack, une idée à casser. Je lis tout, je réponds
-      sous 48 h.
-    </p>
-    <ContactForm />
+    <div class="sx-container contact-grille">
+      <div class="section-tete">
+        <p class="eyebrow" data-reveal>Contact</p>
+        <h2 data-reveal style="--i: 1">Une question, un projet, un partenariat ?</h2>
+        <p class="lead" data-reveal style="--i: 2">
+          Écrivez-nous. Nous lisons tout et répondons sous 48 heures.
+        </p>
+      </div>
+      <div class="sx-card formulaire" data-reveal style="--i: 2">
+        <ContactForm />
+      </div>
+    </div>
   </section>
 </Base>
 
 <style>
-  .hero h1 {
-    font-size: 1.5rem;
-    line-height: 1.3;
-    max-width: 34ch;
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: var(--sx-space-9) var(--sx-space-10);
+    border-bottom: 1px solid var(--sx-border);
+    -webkit-mask-image: none;
   }
-  .pitch {
-    color: var(--muted);
-    max-width: 60ch;
-    margin: 0.9rem 0 0;
+  .hero::after {
+    /* fondu de la trame vers le fond */
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(120% 90% at 50% 0%, transparent 40%, var(--sx-bg) 100%);
   }
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    list-style: none;
-    padding: 0;
-    margin: 1.25rem 0 0;
+  .halo {
+    position: absolute;
+    inset: -20% -10% auto auto;
+    width: 900px;
+    height: 900px;
+    z-index: -2;
+    background:
+      radial-gradient(closest-side, var(--sx-glow), transparent),
+      radial-gradient(closest-side at 30% 70%, var(--sx-glow-2), transparent 70%);
+    filter: blur(20px);
+    animation: flotte 14s var(--sx-ease) infinite alternate;
   }
-  .tags li {
-    font-size: 0.6875rem;
-    color: var(--muted);
-    border: 1px solid var(--rule);
-    border-radius: 3px;
-    padding: 0.15rem 0.55rem;
+  @keyframes flotte {
+    to {
+      transform: translate(-60px, 40px) scale(1.05);
+    }
   }
-
-  .liste {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .projet {
-    display: flex;
-    justify-content: space-between;
-    gap: 1.5rem;
-    padding-bottom: 1.15rem;
-    margin-bottom: 1.15rem;
-    border-bottom: 1px solid var(--rule);
-  }
-  .projet:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
-    margin-bottom: 0;
-  }
-  .corps {
-    min-width: 0;
-  }
-  .titre-ligne {
-    display: flex;
+  .hero-grille {
+    display: grid;
+    gap: var(--sx-space-8);
     align-items: center;
-    gap: 0.6rem;
-    flex-wrap: wrap;
   }
-  .titre-ligne a {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--text);
+  @media (min-width: 960px) {
+    .hero-grille {
+      grid-template-columns: 1.35fr 1fr;
+    }
   }
-  .titre-ligne a:hover {
-    border-bottom-color: var(--accent);
+  .hero h1 {
+    max-width: 13ch;
+    margin-bottom: var(--sx-space-6);
   }
-  .badge {
-    font-size: 0.625rem;
-    background: var(--accent-bg);
-    color: var(--accent-text);
-    border-radius: 3px;
-    padding: 0.1rem 0.45rem;
-  }
-  .resume {
-    color: var(--muted);
-    font-size: 0.8125rem;
-    margin: 0.4rem 0 0;
-    max-width: 60ch;
-  }
-  .meta {
-    font-size: 0.6875rem;
-    color: var(--faint);
-    margin: 0.5rem 0 0;
-  }
-  .externe {
-    font-size: 0.6875rem;
+  .souligne {
+    position: relative;
     white-space: nowrap;
   }
-
-  .bloc + .bloc {
-    margin-top: 2.5rem;
+  .souligne::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.04em;
+    height: 0.09em;
+    border-radius: var(--sx-radius-pill);
+    background: var(--sx-coral);
+    transform-origin: left;
+    animation: trace 1.2s var(--sx-ease) 0.6s both;
   }
-  .bloc-tete {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--rule-strong);
+  @keyframes trace {
+    from {
+      transform: scaleX(0);
+    }
   }
-  .bloc-tete h2 {
-    font-size: 0.9375rem;
-  }
-  .compte {
-    font-size: 0.625rem;
-    color: var(--faint);
-  }
-  .intro {
-    color: var(--muted);
-    font-size: 0.8125rem;
-    max-width: 62ch;
-    margin: 0.8rem 0 1.25rem;
-  }
-  .intro-seule {
-    margin-bottom: 1.75rem;
+  .hero-actions {
+    margin-top: var(--sx-space-7);
   }
 
-  .catalogue {
+  /* Orbite */
+  .orbite {
+    position: relative;
+    width: min(100%, 440px);
+    aspect-ratio: 1;
+    margin-inline: auto;
+    display: grid;
+    place-items: center;
+  }
+  .anneau {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--sx-border);
+  }
+  .anneau-1 {
+    inset: 28%;
+    border-style: dashed;
+  }
+  .anneau-2 {
+    inset: 14%;
+    animation: tourne 26s linear infinite;
+  }
+  .anneau-3 {
+    inset: 0;
+    animation: tourne 48s linear infinite reverse;
+  }
+  @keyframes tourne {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .satellite {
+    position: absolute;
+    top: -6px;
+    left: calc(50% - 6px);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--sx-coral);
+    box-shadow: 0 0 0 6px var(--sx-glow-2);
+  }
+  .satellite-2 {
+    top: auto;
+    bottom: 14%;
+    left: 4%;
+    width: 8px;
+    height: 8px;
+    background: var(--sx-link);
+    box-shadow: 0 0 0 6px var(--sx-glow);
+  }
+  .noyau {
+    width: 26%;
+    height: auto;
+    border-radius: var(--sx-radius-lg);
+    box-shadow: 0 0 0 12px var(--sx-glow), 0 24px 60px var(--sx-glow);
+  }
+  .etiquette {
+    position: absolute;
+    font-size: var(--sx-fs-sm);
+    font-weight: 500;
+    padding: var(--sx-space-2) var(--sx-space-4);
+    border-radius: var(--sx-radius-pill);
+    background: var(--sx-glass-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--sx-border);
+    white-space: nowrap;
+  }
+  .etiquette-1 {
+    top: 9%;
+    left: 4%;
+  }
+  .etiquette-2 {
+    top: 46%;
+    right: -2%;
+  }
+  .etiquette-3 {
+    bottom: 6%;
+    left: 22%;
+  }
+
+  /* ---------- Produits ---------- */
+  .produits,
+  .briques,
+  .principes {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
-    gap: 0.6rem;
+    gap: var(--sx-space-5);
   }
-  .catalogue li {
-    display: flex;
+  @media (min-width: 720px) {
+    .produits {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .produits > li {
+    display: grid;
   }
   .carte {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
-    width: 100%;
-    border: 1px solid var(--rule);
-    border-radius: 3px;
-    padding: 0.6rem 0.7rem 0.7rem;
-    background: var(--surface);
-    color: var(--text);
+    gap: var(--sx-space-3);
+    min-height: 320px;
+    color: var(--sx-text);
     text-decoration: none;
+    overflow: hidden;
+    transition:
+      transform var(--sx-dur) var(--sx-ease),
+      border-color var(--sx-dur) var(--sx-ease),
+      box-shadow var(--sx-dur) var(--sx-ease);
+  }
+  a.carte::before {
+    content: '';
+    position: absolute;
+    inset: auto -30% -60% auto;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, var(--sx-glow), transparent);
+    opacity: 0;
+    transition: opacity var(--sx-dur) var(--sx-ease);
+    pointer-events: none;
   }
   a.carte:hover {
-    border-color: var(--rule-strong);
-    border-bottom-color: var(--rule-strong);
+    transform: translateY(-4px);
+    border-color: var(--sx-ring);
+    box-shadow: var(--sx-shadow);
   }
-  a.carte:hover .logo,
-  a.carte:hover .monogramme {
+  a.carte:hover::before {
     opacity: 1;
-    color: var(--accent);
   }
-  .tete {
+  .carte-haut {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.4rem;
+    margin-bottom: var(--sx-space-5);
   }
-  .logo {
-    width: 0.875rem;
-    height: 0.875rem;
-    flex: none;
-    opacity: 0.55;
-    filter: grayscale(1);
-  }
-  html[data-theme='dark'] .logo {
-    filter: grayscale(1) invert(1);
-  }
-  .monogramme {
-    font-size: 0.5rem;
-    line-height: 1;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: var(--faint);
-    border: 1px solid var(--rule-strong);
-    border-radius: 2px;
-    padding: 0.16rem 0.14rem;
-    flex: none;
-    opacity: 0.7;
-  }
-  .aff {
-    font-size: 0.5rem;
-    color: var(--faint);
-    border: 1px solid var(--rule);
-    border-radius: 2px;
-    padding: 0 0.2rem;
-  }
-  .cat {
-    font-size: 0.5625rem;
-    color: var(--faint);
-    letter-spacing: 0.04em;
-    margin-top: 0.1rem;
-  }
-  .nom {
-    font-size: 0.8125rem;
+  .numero {
+    font-size: var(--sx-fs-sm);
     font-weight: 500;
+    color: var(--sx-text-muted);
+    font-variant-numeric: tabular-nums;
   }
-  .note {
-    font-size: 0.6875rem;
-    color: var(--muted);
-    line-height: 1.55;
-    margin-top: 0.2rem;
+  .carte-nom {
+    font-size: var(--sx-fs-2xl);
+    font-weight: 700;
+    letter-spacing: var(--sx-tracking-heading);
+    line-height: var(--sx-lh-heading);
   }
-  .mention {
-    font-size: 0.625rem;
-    color: var(--faint);
-    line-height: 1.6;
-    max-width: 62ch;
-    margin: 2rem 0 0;
+  .carte-cat {
+    font-size: var(--sx-fs-sm);
+    font-weight: 500;
+    color: var(--sx-link);
+  }
+  .carte-accroche {
+    color: var(--sx-text-muted);
+    max-width: 46ch;
+  }
+  .carte-pied {
+    margin-top: auto;
+    padding-top: var(--sx-space-5);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sx-space-2);
+    font-weight: 500;
+    color: var(--sx-text);
+    text-decoration: none;
+    min-height: 48px;
+  }
+  a.carte:hover .carte-pied :global(.fleche),
+  .carte-pied:hover :global(.fleche) {
+    transform: translateX(4px);
+  }
+  .carte-pied :global(.fleche) {
+    transition: transform var(--sx-dur) var(--sx-ease);
+  }
+  .carte-suivante {
+    padding: var(--sx-space-6);
+    border-radius: var(--sx-radius-lg);
+    border: 2px dashed var(--sx-border);
+    background: transparent;
   }
 
-  @media (max-width: 34rem) {
-    .projet {
-      flex-direction: column;
-      gap: 0.5rem;
+  /* ---------- Socle ---------- */
+  .briques {
+    gap: var(--sx-space-4);
+  }
+  @media (min-width: 640px) {
+    .briques {
+      grid-template-columns: repeat(2, 1fr);
     }
-    .catalogue {
-      grid-template-columns: 1fr;
+  }
+  @media (min-width: 1024px) {
+    .briques {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .brique {
+    display: grid;
+    align-content: start;
+    gap: var(--sx-space-3);
+    backdrop-filter: blur(6px);
+    transition: border-color var(--sx-dur) var(--sx-ease), transform var(--sx-dur) var(--sx-ease);
+  }
+  .brique:hover {
+    border-color: var(--sx-on-band-muted);
+    transform: translateY(-3px);
+  }
+  .brique-icone {
+    display: inline-grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--sx-radius-md);
+    border: 1px solid var(--sx-border);
+    margin-bottom: var(--sx-space-3);
+    position: relative;
+  }
+  .brique-icone::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sx-coral);
+  }
+  .brique-role {
+    font-size: var(--sx-fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--sx-text-muted);
+  }
+
+  /* ---------- Approche ---------- */
+  @media (min-width: 860px) {
+    .principes {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sx-space-6);
+    }
+  }
+  .principes li {
+    display: grid;
+    gap: var(--sx-space-3);
+    align-content: start;
+    padding-top: var(--sx-space-5);
+    border-top: 2px solid var(--sx-border);
+    position: relative;
+  }
+  .principes li::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 48px;
+    height: 2px;
+    background: var(--sx-coral);
+  }
+  .principe-num {
+    font-size: var(--sx-fs-3xl);
+    font-weight: 700;
+    letter-spacing: var(--sx-tracking-display);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--sx-text-muted);
+  }
+
+  /* ---------- Contact ---------- */
+  .contact {
+    border-top: 1px solid var(--sx-border);
+  }
+  .contact-grille {
+    display: grid;
+    gap: var(--sx-space-6);
+  }
+  @media (min-width: 960px) {
+    .contact-grille {
+      grid-template-columns: 1fr 1.2fr;
+      align-items: start;
+    }
+  }
+  .formulaire {
+    box-shadow: var(--sx-shadow);
+  }
+  @media (max-width: 480px) {
+    .formulaire,
+    .carte,
+    .brique {
+      padding: var(--sx-space-5);
     }
   }
 </style>

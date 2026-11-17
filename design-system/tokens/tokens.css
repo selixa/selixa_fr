@@ -1,0 +1,139 @@
+/* Selixacorp design tokens — source de vérité : tokens.json */
+@font-face { font-family: "Space Grotesk"; font-weight: 400; font-style: normal; font-display: swap; src: url("../fonts/space-grotesk-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 500; font-style: normal; font-display: swap; src: url("../fonts/space-grotesk-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-weight: 700; font-style: normal; font-display: swap; src: url("../fonts/space-grotesk-latin-700-normal.woff2") format("woff2"); }
+
+:root {
+  /* Marque */
+  --sx-indigo: #1E2160;
+  --sx-indigo-deep: #14163A;
+  --sx-blue: #2B3FD6;
+  --sx-coral: #FF8A5B;      /* accent décoratif uniquement, jamais pour du texte */
+
+  /* Thème clair (défaut) */
+  --sx-bg: #F7F7FB;
+  --sx-surface: #FFFFFF;
+  --sx-text: #1E2160;
+  --sx-text-muted: #5A5E8A;
+  --sx-border: #E2E4F0;
+  --sx-link: #2B3FD6;
+  --sx-primary: #1E2160;
+  --sx-primary-hover: #14163A;
+  --sx-on-primary: #FFFFFF;
+  --sx-focus: #2B3FD6;
+
+  /* Typo */
+  --sx-font: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sx-fs-xs: 0.8125rem;
+  --sx-fs-sm: 0.9375rem;
+  --sx-fs-base: 1.0625rem;
+  --sx-fs-lg: 1.25rem;
+  --sx-fs-xl: 1.625rem;
+  --sx-fs-2xl: 2.25rem;
+  --sx-fs-3xl: clamp(2.5rem, 5vw, 4rem);
+  --sx-fs-display: clamp(3rem, 8vw, 6rem);
+  --sx-lh-tight: 1.05;
+  --sx-lh-heading: 1.15;
+  --sx-lh-body: 1.6;
+  --sx-tracking-display: -0.03em;
+  --sx-tracking-heading: -0.02em;
+
+  /* Espacement (base 4px) */
+  --sx-space-1: 4px;  --sx-space-2: 8px;   --sx-space-3: 12px; --sx-space-4: 16px;
+  --sx-space-5: 24px; --sx-space-6: 32px;  --sx-space-7: 48px; --sx-space-8: 64px;
+  --sx-space-9: 96px; --sx-space-10: 128px;
+
+  /* Formes */
+  --sx-radius-sm: 8px;
+  --sx-radius-md: 16px;
+  --sx-radius-lg: 24px;
+  --sx-radius-pill: 999px;
+
+  /* Mise en page */
+  --sx-container: 1120px;
+  --sx-gutter: 16px;
+  --sx-shadow: 0 1px 2px rgb(20 22 58 / 6%), 0 8px 24px rgb(20 22 58 / 8%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sx-bg: #14163A;
+    --sx-surface: #1E2160;
+    --sx-text: #F7F7FB;
+    --sx-text-muted: #B4B8E0;
+    --sx-border: #343A8A;
+    --sx-link: #A9B4FF;
+    --sx-primary: #FFFFFF;
+    --sx-primary-hover: #E2E4F0;
+    --sx-on-primary: #14163A;
+    --sx-focus: #A9B4FF;
+  }
+}
+:root[data-theme="dark"] {
+  --sx-bg: #14163A;
+  --sx-surface: #1E2160;
+  --sx-text: #F7F7FB;
+  --sx-text-muted: #B4B8E0;
+  --sx-border: #343A8A;
+  --sx-link: #A9B4FF;
+  --sx-primary: #FFFFFF;
+  --sx-primary-hover: #E2E4F0;
+  --sx-on-primary: #14163A;
+  --sx-focus: #A9B4FF;
+}
+
+/* Base minimale */
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light dark; }
+body { margin: 0; background: var(--sx-bg); color: var(--sx-text); font-family: var(--sx-font); font-size: var(--sx-fs-base); line-height: var(--sx-lh-body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-weight: 700; line-height: var(--sx-lh-heading); letter-spacing: var(--sx-tracking-heading); margin: 0; }
+h1 { font-size: var(--sx-fs-3xl); letter-spacing: var(--sx-tracking-display); line-height: var(--sx-lh-tight); }
+h2 { font-size: var(--sx-fs-2xl); }
+h3 { font-size: var(--sx-fs-xl); }
+a { color: var(--sx-link); }
+:focus-visible { outline: 3px solid var(--sx-focus); outline-offset: 3px; border-radius: 4px; }
+.sx-container { width: min(100% - 2 * var(--sx-gutter), var(--sx-container)); margin-inline: auto; }
+.sx-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 var(--sx-space-5); border-radius: var(--sx-radius-pill); border: 0; background: var(--sx-primary); color: var(--sx-on-primary); font: 700 var(--sx-fs-sm)/1 var(--sx-font); text-decoration: none; cursor: pointer; }
+.sx-btn:hover { background: var(--sx-primary-hover); }
+.sx-btn--ghost { background: transparent; color: var(--sx-text); box-shadow: inset 0 0 0 2px var(--sx-border); }
+.sx-btn--ghost:hover { background: var(--sx-surface); }
+.sx-card { background: var(--sx-surface); border: 1px solid var(--sx-border); border-radius: var(--sx-radius-lg); padding: var(--sx-space-6); }
+@media (min-width: 768px) { :root { --sx-gutter: 32px; } }
+
+/* ------------------------------------------------------------------
+   Extension futuriste (v1.1) — écart assumé au kit d'origine, voir README
+   Halos, trame de grille, effet verre, bandes « nuit ». Toujours via ces
+   variables, jamais en dur dans les composants.
+   ------------------------------------------------------------------ */
+:root {
+  --sx-indigo-night: #0D0F2B;          /* fond des bandes sombres */
+  --sx-glow: rgb(43 63 214 / 20%);     /* halo principal (bleu) */
+  --sx-glow-2: rgb(255 138 91 / 14%);  /* halo secondaire (corail), très discret */
+  --sx-grid-line: rgb(30 33 96 / 7%);  /* trame de grille */
+  --sx-glass-bg: rgb(247 247 251 / 72%);
+  --sx-glass-blur: 14px;
+  --sx-ring: rgb(43 63 214 / 45%);     /* bordure « allumée » au survol */
+  --sx-on-band: #F7F7FB;
+  --sx-on-band-muted: #B4B8E0;
+  --sx-band-border: #343A8A;
+  --sx-band-grid-line: rgb(169 180 255 / 9%);
+  --sx-band-surface: rgb(30 33 96 / 55%);
+  --sx-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --sx-dur: 420ms;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sx-glow: rgb(110 128 255 / 26%);
+    --sx-glow-2: rgb(255 138 91 / 12%);
+    --sx-grid-line: rgb(169 180 255 / 8%);
+    --sx-glass-bg: rgb(20 22 58 / 70%);
+    --sx-ring: rgb(169 180 255 / 55%);
+  }
+}
+:root[data-theme="dark"] {
+  --sx-glow: rgb(110 128 255 / 26%);
+  --sx-glow-2: rgb(255 138 91 / 12%);
+  --sx-grid-line: rgb(169 180 255 / 8%);
+  --sx-glass-bg: rgb(20 22 58 / 70%);
+  --sx-ring: rgb(169 180 255 / 55%);
+}

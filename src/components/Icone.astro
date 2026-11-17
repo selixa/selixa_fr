@@ -1,0 +1,52 @@
+---
+// Icônes au trait 2 px, coins arrondis, couleur du texte (règle du design system).
+interface Props {
+  nom: 'langues' | 'bulle' | 'document' | 'cadran' | 'fleche' | 'externe' | 'soleil' | 'lune';
+  taille?: number;
+}
+const { nom, taille = 24 } = Astro.props;
+---
+
+<svg
+  width={taille}
+  height={taille}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  class:list={['icone', nom === 'fleche' && 'fleche']}
+>
+  {nom === 'langues' && (
+    <>
+      <path d="M4 5h8M8 3v2M5.5 5c.8 3.5 3.2 6 6.5 7.5M10.5 5c-.8 3.6-3.4 6.4-6.5 8" />
+      <path d="M13 21l3.5-9 3.5 9M14.2 18h4.6" />
+    </>
+  )}
+  {nom === 'bulle' && (
+    <path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12zM8.5 12h.01M12 12h.01M15.5 12h.01" />
+  )}
+  {nom === 'document' && (
+    <>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 3v5h5M9 13h6M9 17h4" />
+    </>
+  )}
+  {nom === 'cadran' && (
+    <>
+      <path d="M3.5 17a9 9 0 1 1 17 0" />
+      <path d="M12 14l4-5M12 14h.01M7 17h10" />
+    </>
+  )}
+  {nom === 'fleche' && <path d="M5 12h14M13 6l6 6-6 6" />}
+  {nom === 'externe' && <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />}
+  {nom === 'soleil' && (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </>
+  )}
+  {nom === 'lune' && <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" />}
+</svg>

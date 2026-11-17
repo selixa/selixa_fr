@@ -1,0 +1,281 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icone from '../../components/Icone.astro';
+
+export async function getStaticPaths() {
+  const produits = (await getCollection('produits', ({ data }) => !data.brouillon)).sort(
+    (a, b) => a.data.ordre - b.data.ordre
+  );
+  return produits.map((produit) => ({
+    params: { slug: produit.id },
+    props: { produit, autres: produits.filter((p) => p.id !== produit.id) },
+  }));
+}
+
+const { produit, autres } = Astro.props;
+const { Content } = await render(produit);
+const d = produit.data;
+
+const application = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: d.nom,
+  description: d.description,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  ...(d.url && { url: d.url }),
+  publisher: { '@id': `${Astro.site}#organisation` },
+};
+const fil = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Selixacorp', item: Astro.site?.toString() },
+    { '@type': 'ListItem', position: 2, name: 'Produits', item: new URL('/#produits', Astro.site).toString() },
+    { '@type': 'ListItem', position: 3, name: d.nom },
+  ],
+};
+const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
+---
+
+<Base titre={d.titreSeo} description={d.description} jsonld={[application, fil]}>
+  <section class="hero-produit trame">
+    <div class="halo" aria-hidden="true"></div>
+    <div class="sx-container">
+      <nav class="fil" aria-label="Fil d'Ariane">
+        <a href="/">Selixacorp</a> <span aria-hidden="true">/</span>
+        <a href="/#produits">Produits</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">{d.nom}</span>
+      </nav>
+      <div class="tete" data-reveal>
+        <span class="badge" data-statut={d.statut}>{d.statut}</span>
+        <span class="cat">{d.categorie}</span>
+      </div>
+      <h1 class="display" data-reveal style="--i: 1">{d.nom}</h1>
+      <p class="lead" data-reveal style="--i: 2">{d.accroche}</p>
+      {
+        d.url && (
+          <div class="actions" data-reveal style="--i: 3">
+            <a class="sx-btn" href={d.url} rel="noopener">
+              Visiter {domaine} <Icone nom="externe" taille={18} />
+            </a>
+          </div>
+        )
+      }
+      <dl class="meta" data-reveal style="--i: 4">
+        {d.depuis && (
+          <div>
+            <dt>Depuis</dt>
+            <dd>{d.depuis}</dd>
+          </div>
+        )}
+        {d.plateformes.length > 0 && (
+          <div>
+            <dt>Disponible</dt>
+            <dd>{d.plateformes.join(' · ')}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Éditeur</dt>
+          <dd>Selixacorp</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sx-container corps">
+      <aside class="points" aria-label="En bref">
+        <p class="eyebrow">En bref</p>
+        <ul>
+          {d.points.map((pt, i) => (
+            <li data-reveal style={`--i: ${i}`}>
+              <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              {pt}
+            </li>
+          ))}
+        </ul>
+      </aside>
+      <article class="prose">
+        <Content />
+      </article>
+    </div>
+  </section>
+
+  {
+    autres.length > 0 && (
+      <section class="section bande trame">
+        <div class="sx-container">
+          <div class="section-tete">
+            <p class="eyebrow">Également chez Selixacorp</p>
+            <h2>Nos autres produits</h2>
+          </div>
+          <ul class="autres">
+            {autres.map((p, i) => (
+              <li data-reveal style={`--i: ${i}`}>
+                <a class="sx-card autre" href={`/produits/${p.id}/`}>
+                  <span class="autre-nom">{p.data.nom}</span>
+                  <span class="muted">{p.data.accroche}</span>
+                  <span class="autre-pied">
+                    Découvrir <Icone nom="fleche" taille={18} />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .hero-produit {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: var(--sx-space-7) var(--sx-space-9);
+    border-bottom: 1px solid var(--sx-border);
+  }
+  .hero-produit::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(120% 90% at 50% 0%, transparent 40%, var(--sx-bg) 100%);
+  }
+  .halo {
+    position: absolute;
+    top: -30%;
+    right: -15%;
+    width: 760px;
+    height: 760px;
+    z-index: -2;
+    background: radial-gradient(closest-side, var(--sx-glow), transparent);
+  }
+  .fil {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sx-space-2);
+    font-size: var(--sx-fs-sm);
+    color: var(--sx-text-muted);
+    margin-bottom: var(--sx-space-8);
+  }
+  .fil a {
+    color: var(--sx-text-muted);
+  }
+  .tete {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sx-space-4);
+    margin-bottom: var(--sx-space-5);
+  }
+  .cat {
+    font-size: var(--sx-fs-sm);
+    font-weight: 500;
+    color: var(--sx-link);
+  }
+  h1 {
+    margin-bottom: var(--sx-space-5);
+    overflow-wrap: anywhere;
+  }
+  .actions {
+    margin-top: var(--sx-space-6);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sx-space-5) var(--sx-space-8);
+    margin: var(--sx-space-8) 0 0;
+    padding-top: var(--sx-space-5);
+    border-top: 1px solid var(--sx-border);
+  }
+  .meta dt {
+    font-size: var(--sx-fs-xs);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sx-text-muted);
+  }
+  .meta dd {
+    margin: var(--sx-space-1) 0 0;
+    font-weight: 500;
+  }
+
+  .corps {
+    display: grid;
+    gap: var(--sx-space-8);
+  }
+  @media (min-width: 960px) {
+    .corps {
+      grid-template-columns: 1fr 1.6fr;
+      align-items: start;
+    }
+    .points {
+      position: sticky;
+      top: 108px;
+    }
+  }
+  .points ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--sx-space-3);
+  }
+  .points li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--sx-space-4);
+    padding: var(--sx-space-4) var(--sx-space-5);
+    border: 1px solid var(--sx-border);
+    border-radius: var(--sx-radius-md);
+    background: var(--sx-surface);
+    font-weight: 500;
+  }
+  .num {
+    color: var(--sx-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .autres {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--sx-space-4);
+  }
+  @media (min-width: 720px) {
+    .autres {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .autres li {
+    display: grid;
+  }
+  .autre {
+    display: grid;
+    gap: var(--sx-space-3);
+    color: var(--sx-text);
+    text-decoration: none;
+    transition: border-color var(--sx-dur) var(--sx-ease), transform var(--sx-dur) var(--sx-ease);
+  }
+  .autre:hover {
+    border-color: var(--sx-on-band-muted);
+    transform: translateY(-3px);
+  }
+  .autre-nom {
+    font-size: var(--sx-fs-xl);
+    font-weight: 700;
+    letter-spacing: var(--sx-tracking-heading);
+  }
+  .autre-pied {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sx-space-2);
+    font-weight: 500;
+    margin-top: var(--sx-space-3);
+  }
+</style>

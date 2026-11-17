@@ -1,49 +1,57 @@
 # selixa.fr
 
-Portfolio statique. Astro , aucune base de données, aucun framework JS côté client.
+Vitrine de Selixacorp, éditeur de Koloni, bonjour.guide, Freat et des prochains produits.
+Astro statique, aucune base de données, aucun framework JS côté client.
 
 ## Démarrer
 
 ```bash
 npm install
 npm run dev      # http://localhost:4321
-npm run build    # sortie dans dist/
+npm run build    # sortie dans dist/ (+ sitemap)
 ```
 
-## Ajouter un projet
+## Ajouter un produit
 
-Créer `src/content/projets/mon-projet.md` :
+Créer `src/content/produits/mon-produit.md` :
 
 ```markdown
 ---
-titre: "Mon projet"
-resume: "Une phrase, deux maximum."
-annee: "2026"
-statut: "en cours"        # en cours | en ligne | archivé | terminé — optionnel
-stack: ["Supabase", "Deno"]
-lien: "https://exemple.fr"  # optionnel
-lienLabel: "exemple.fr"     # optionnel
-ordre: 4                    # tri croissant sur la page d'accueil
-brouillon: false            # true = exclu du site publié
+nom: "Mon produit"
+accroche: "Une ligne, affichée sur la carte et sous le titre."
+description: "Meta description SEO, 150 à 160 caractères."
+titreSeo: "Mon produit, ce qu'il fait en quelques mots"
+categorie: "Secteur"
+statut: "en préparation"   # en ligne | bêta | en préparation
+url: "https://exemple.fr"  # optionnel
+depuis: "2027"             # optionnel
+plateformes: ["Web"]
+points:
+  - "Bénéfice 1"
+  - "Bénéfice 2"
+  - "Bénéfice 3"
+ordre: 4                   # tri croissant
+brouillon: false           # true = exclu du site publié
 ---
 
-## Un titre de section
-
-Le texte en Markdown.
+## Le problème
+…
 ```
 
-Le nom du fichier devient l'URL : `/projets/mon-projet/`. Le schéma est déclaré dans
-`src/content.config.ts` — si un champ obligatoire manque ou qu'un type est faux, le
-build échoue avec un message explicite plutôt que de publier une page cassée.
+Le nom du fichier devient l'URL `/produits/mon-produit/`. La fiche reçoit automatiquement les
+données structurées `SoftwareApplication`, le fil d'Ariane et les liens vers les autres produits.
+Un produit `en préparation` permet d'annoncer un projet avant son lancement.
 
-Les images vont dans `src/assets/` et se référencent en relatif depuis le Markdown ;
-Astro les redimensionne et les convertit en WebP au build.
+Les briques techniques communes (section « Le socle ») sont dans `src/data/socle.ts`.
 
-## Modifier les outils
+## Design system
 
-`src/data/outils.ts`. Un tableau de catégories, chaque outil a un nom, une note courte
-et un niveau (`quotidien`, `solide`, `occasionnel`). Le niveau `quotidien` s'affiche en
-couleur d'accent.
+`design-system/` contient le kit de marque (logos, tokens, polices) et son README, qui fait référence.
+`tokens.css` est importé par `src/styles/global.css` ; les logos et favicons servis sont copiés dans
+`public/brand/`. N'utiliser que les variables `--sx-*` : aucune couleur en dur.
+
+Thème : préférence système par défaut, bascule dans l'en-tête mémorisée dans `localStorage`
+(`data-theme` sur `<html>`).
 
 ## Formulaire de contact
 
@@ -62,6 +70,10 @@ Le domaine de `CONTACT_FROM` doit être vérifié dans Resend (SPF + DKIM). Un c
 piège invisible (`societe`) absorbe les robots : s'il est rempli, la fonction répond
 204 sans rien envoyer.
 
+## Redirections
+
+`public/_redirects` envoie les anciennes pages `/projets/*` du portfolio vers l'accueil (301).
+
 ## Déployer
 
 Cloudflare Pages, connecté au dépôt Git.
@@ -72,9 +84,3 @@ Cloudflare Pages, connecté au dépôt Git.
 
 Chaque `git push` sur la branche principale déclenche un build et une mise en ligne.
 Les autres branches produisent une preview jetable.
-
-## Mode sombre
-
-Bascule dans l'en-tête, choix mémorisé dans `localStorage`, thème système par défaut.
-Les couleurs sont des variables CSS dans `src/styles/global.css` — deux blocs, `:root`
-et `:root[data-theme='dark']`. Ne jamais écrire une couleur en dur ailleurs.

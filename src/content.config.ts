@@ -1,19 +1,26 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-const projets = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/projets' }),
+const produits = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/produits' }),
   schema: z.object({
-    titre: z.string(),
-    resume: z.string(),
-    annee: z.string(),
-    statut: z.enum(['en cours', 'en ligne', 'archivé', 'terminé']).optional(),
-    stack: z.array(z.string()).default([]),
-    lien: z.string().url().optional(),
-    lienLabel: z.string().optional(),
+    nom: z.string(),
+    /** Une ligne, affichée sur la carte et sous le titre de la fiche. */
+    accroche: z.string(),
+    /** Meta description de la fiche : 150 à 160 caractères. */
+    description: z.string().max(170),
+    /** Titre de la balise <title>, sans « | Selixacorp » (ajouté automatiquement). */
+    titreSeo: z.string(),
+    categorie: z.string(),
+    statut: z.enum(['en ligne', 'bêta', 'en préparation']),
+    url: z.string().url().optional(),
+    depuis: z.string().optional(),
+    plateformes: z.array(z.string()).default([]),
+    /** Trois ou quatre bénéfices courts. */
+    points: z.array(z.string()).min(2).max(5),
     ordre: z.number().default(99),
     brouillon: z.boolean().default(false),
   }),
 });
 
-export const collections = { projets };
+export const collections = { produits };

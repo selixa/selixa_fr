@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base titre="Page introuvable" noindex>
+  <section class="section trame perdu">
+    <div class="sx-container">
+      <p class="eyebrow">Erreur 404</p>
+      <h1 class="display">Hors orbite.</h1>
+      <p class="lead">Cette page n'existe pas, ou plus. Les produits, eux, sont toujours là.</p>
+      <a class="sx-btn" href="/">Retour à l'accueil</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .perdu {
+    min-height: 70vh;
+    display: grid;
+    align-items: center;
+  }
+  .lead {
+    margin: var(--sx-space-5) 0 var(--sx-space-7);
+  }
+</style>

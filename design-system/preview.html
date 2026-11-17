@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selixacorp — Design system</title>
+<link rel="icon" type="image/svg+xml" href="logos/favicon.svg">
+<link rel="stylesheet" href="tokens/tokens.css">
+<style>
+section { padding-block: var(--sx-space-8); border-top: 1px solid var(--sx-border); }
+.row { display: flex; flex-wrap: wrap; gap: var(--sx-space-5); align-items: center; margin-top: var(--sx-space-5); }
+.sw { width: 160px; border-radius: var(--sx-radius-md); overflow: hidden; border: 1px solid var(--sx-border); background: var(--sx-surface); font-size: var(--sx-fs-xs); }
+.sw i { display: block; height: 80px; }
+.sw span { display: block; padding: var(--sx-space-3); }
+.panel { padding: var(--sx-space-6); border-radius: var(--sx-radius-lg); }
+</style>
+</head>
+<body>
+<header class="sx-container" style="padding-block: var(--sx-space-6)">
+<img src="logos/logo-horizontal.svg" alt="Selixacorp" height="56">
+</header>
+<main class="sx-container">
+<section>
+<h1>Design system Selixacorp</h1>
+<p style="color: var(--sx-text-muted); max-width: 60ch">Indigo profond, un seul accent corail, Space Grotesk. Sobre, lisible, sans décor.</p>
+</section>
+<section>
+<h2>Logos</h2>
+<div class="row">
+<div class="panel" style="background:#F7F7FB"><img src="logos/logo-horizontal.svg" alt="Logo horizontal" height="72"></div>
+<div class="panel" style="background:#14163A"><img src="logos/logo-horizontal-dark.svg" alt="Logo horizontal sur fond sombre" height="72"></div>
+</div>
+<div class="row">
+<img src="logos/icon-rounded.svg" alt="Icône arrondie" width="96" height="96">
+<img src="logos/icon-square.svg" alt="Icône carrée" width="96" height="96">
+<div class="panel" style="background:#F7F7FB"><img src="logos/mark.svg" alt="Pictogramme" width="72" height="72"></div>
+<div class="panel" style="background:#14163A"><img src="logos/mark-white.svg" alt="Pictogramme blanc" width="72" height="72"></div>
+</div>
+</section>
+<section>
+<h2>Couleurs</h2>
+<div class="row">
+<div class="sw"><i style="background:#1E2160"></i><span>Indigo<br>#1E2160</span></div>
+<div class="sw"><i style="background:#14163A"></i><span>Indigo profond<br>#14163A</span></div>
+<div class="sw"><i style="background:#2B3FD6"></i><span>Bleu lien<br>#2B3FD6</span></div>
+<div class="sw"><i style="background:#FF8A5B"></i><span>Corail (déco)<br>#FF8A5B</span></div>
+<div class="sw"><i style="background:#F7F7FB"></i><span>Fond<br>#F7F7FB</span></div>
+<div class="sw"><i style="background:#5A5E8A"></i><span>Texte atténué<br>#5A5E8A</span></div>
+</div>
+</section>
+<section>
+<h2>Typographie</h2>
+<p style="font-size: var(--sx-fs-display); font-weight: 700; letter-spacing: var(--sx-tracking-display); line-height: var(--sx-lh-tight); margin: var(--sx-space-5) 0 0">Selixa<span style="font-weight:400">corp</span></p>
+<h2 style="margin-top: var(--sx-space-6)">Titre de section</h2>
+<h3 style="margin-top: var(--sx-space-4)">Sous-titre</h3>
+<p style="max-width: 60ch">Texte courant en Space Grotesk 400, interligne 1,6. Les liens sont <a href="#">soulignés et bleus</a>.</p>
+</section>
+<section>
+<h2>Composants</h2>
+<div class="row">
+<a class="sx-btn" href="#">Bouton principal</a>
+<a class="sx-btn sx-btn--ghost" href="#">Bouton secondaire</a>
+</div>
+<div class="sx-card" style="margin-top: var(--sx-space-5); max-width: 420px">
+<h3>Carte</h3>
+<p style="color: var(--sx-text-muted); margin-bottom: 0">Surface blanche, bordure fine, rayon 24 px.</p>
+</div>
+</section>
+</main>
+</body>
+</html>
