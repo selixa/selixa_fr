@@ -30,6 +30,9 @@ const organisation = {
   '@type': 'Organization',
   '@id': `${Astro.site}#organisation`,
   name: 'Selixacorp',
+  legalName: 'SELIXACORP',
+  taxID: 'FR64945174969',
+  identifier: { '@type': 'PropertyValue', propertyID: 'SIREN', value: '945174969' },
   url: Astro.site?.toString(),
   logo: new URL('/brand/png/favicon-192.png', Astro.site).toString(),
   // sameAs: ['[À COMPLÉTER] LinkedIn, GitHub…'],
@@ -155,7 +158,7 @@ const nav = [
       </div>
       <div class="sx-container pied-bas">
         <span>© {annee} Selixacorp</span>
-        <span>SIREN [À COMPLÉTER]</span>
+        <span>SASU au capital de 500 € · RCS Lyon 945 174 969</span>
       </div>
     </footer>
 
