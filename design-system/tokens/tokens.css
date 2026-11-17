@@ -118,6 +118,7 @@ a { color: var(--sx-link); }
   --sx-band-border: #343A8A;
   --sx-band-grid-line: rgb(169 180 255 / 9%);
   --sx-band-surface: rgb(30 33 96 / 55%);
+  --sx-logo-tile: #FFFFFF;             /* tuile claire des logos produits, dans les deux thèmes */
   --sx-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --sx-dur: 420ms;
 }

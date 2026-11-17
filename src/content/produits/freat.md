@@ -4,6 +4,7 @@ accroche: "Le carnet des meilleurs lieux pour télétravailler, partagés et not
 description: "Freat recense les cafés, coworkings et bibliothèques où télétravailler, avec les avis de la communauté : wifi, prises, calme. Trouvez votre prochain bureau."
 titreSeo: "Freat, trouver un lieu pour télétravailler : cafés, coworkings, bibliothèques"
 categorie: "Télétravail et nomadisme"
+logo: "/brand/produits/freat.svg"
 statut: "en ligne"
 url: "https://freat.io"
 plateformes: ["Web", "Français et anglais"]

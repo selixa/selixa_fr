@@ -1,0 +1,31 @@
+---
+// Logo d'un produit dans une tuile claire (lisible dans les deux thèmes).
+interface Props {
+  src: string;
+  taille?: number;
+  class?: string;
+}
+const { src, taille = 48, class: classe } = Astro.props;
+---
+
+<span class:list={['tuile', classe]} style={`--t: ${taille}px`} aria-hidden="true">
+  <img src={src} alt="" width={Math.round(taille * 0.62)} height={Math.round(taille * 0.62)} loading="lazy" />
+</span>
+
+<style>
+  .tuile {
+    flex-shrink: 0;
+    display: inline-grid;
+    place-items: center;
+    width: var(--t);
+    height: var(--t);
+    border-radius: calc(var(--t) * 0.28);
+    background: var(--sx-logo-tile);
+    box-shadow: inset 0 0 0 1px var(--sx-border);
+  }
+  img {
+    width: 62%;
+    height: 62%;
+    object-fit: contain;
+  }
+</style>

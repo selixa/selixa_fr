@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Icone from '../../components/Icone.astro';
+import LogoProduit from '../../components/LogoProduit.astro';
 
 export async function getStaticPaths() {
   const produits = (await getCollection('produits', ({ data }) => !data.brouillon)).sort(
@@ -28,6 +29,16 @@ const application = {
   ...(d.github && { sameAs: [d.github] }),
   publisher: { '@id': `${Astro.site}#organisation` },
 };
+const video = d.video && {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: d.video.titre,
+  description: d.accroche,
+  thumbnailUrl: new URL(d.video.poster, Astro.site).toString(),
+  contentUrl: new URL(d.video.src, Astro.site).toString(),
+  uploadDate: '2026-10-28',
+  inLanguage: 'fr',
+};
 const fil = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -40,7 +51,7 @@ const fil = {
 const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
 ---
 
-<Base titre={d.titreSeo} description={d.description} jsonld={[application, fil]}>
+<Base titre={d.titreSeo} description={d.description} jsonld={[application, fil, ...(video ? [video] : [])]}>
   <section class="hero-produit trame">
     <div class="halo" aria-hidden="true"></div>
     <div class="sx-container">
@@ -49,7 +60,10 @@ const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
         <a href="/#produits">Produits</a> <span aria-hidden="true">/</span>
         <span aria-current="page">{d.nom}</span>
       </nav>
+      <div class:list={['hero-grille', d.video && 'avec-video']}>
+      <div class="hero-texte">
       <div class="tete" data-reveal>
+        <LogoProduit src={d.logo} taille={64} />
         <span class="badge" data-statut={d.statut}>{d.statut}</span>
         <span class="cat">{d.categorie}</span>
       </div>
@@ -64,6 +78,29 @@ const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
           </div>
         )
       }
+      </div>
+      {
+        d.video && (
+          <figure class="video" data-reveal style="--i: 2">
+            <video
+              controls
+              playsinline
+              preload="none"
+              poster={d.video.poster}
+              width="1280"
+              height="720"
+              aria-label={d.video.titre}
+            >
+              <source src={d.video.src} type="video/mp4" />
+              {d.video.sousTitres && (
+                <track kind="captions" src={d.video.sousTitres} srclang="fr" label="Français" default />
+              )}
+            </video>
+            <figcaption>{d.video.titre}</figcaption>
+          </figure>
+        )
+      }
+      </div>
       <dl class="meta" data-reveal style="--i: 4">
         {d.depuis && (
           <div>
@@ -124,7 +161,10 @@ const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
             {autres.map((p, i) => (
               <li data-reveal style={`--i: ${i}`}>
                 <a class="sx-card autre" href={`/produits/${p.id}/`}>
-                  <span class="autre-nom">{p.data.nom}</span>
+                  <span class="autre-tete">
+                    <LogoProduit src={p.data.logo} taille={44} />
+                    <span class="autre-nom">{p.data.nom}</span>
+                  </span>
                   <span class="muted">{p.data.accroche}</span>
                   <span class="autre-pied">
                     Découvrir <Icone nom="fleche" taille={18} />
@@ -180,6 +220,48 @@ const domaine = d.url ? new URL(d.url).hostname.replace(/^www\./, '') : null;
     align-items: center;
     gap: var(--sx-space-4);
     margin-bottom: var(--sx-space-5);
+  }
+  .hero-grille {
+    display: grid;
+    gap: var(--sx-space-7);
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .hero-grille.avec-video {
+      grid-template-columns: 1fr 1.15fr;
+    }
+    .avec-video h1 {
+      font-size: var(--sx-fs-3xl);
+    }
+  }
+  .video {
+    margin: 0;
+    display: grid;
+    gap: var(--sx-space-3);
+  }
+  .video video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--sx-radius-lg);
+    background: var(--sx-indigo-night);
+    border: 1px solid var(--sx-border);
+    box-shadow: 0 0 0 10px var(--sx-glow), var(--sx-shadow);
+  }
+  @media (max-width: 640px) {
+    .video video {
+      box-shadow: 0 0 0 5px var(--sx-glow);
+    }
+  }
+  .video figcaption {
+    font-size: var(--sx-fs-sm);
+    color: var(--sx-text-muted);
+  }
+  .autre-tete {
+    display: flex;
+    align-items: center;
+    gap: var(--sx-space-4);
   }
   .cat {
     font-size: var(--sx-fs-sm);

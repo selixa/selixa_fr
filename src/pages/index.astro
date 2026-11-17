@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
 import Icone from '../components/Icone.astro';
+import LogoProduit from '../components/LogoProduit.astro';
 import { engagements } from '../data/engagements';
 
 const produits = (await getCollection('produits', ({ data }) => !data.brouillon)).sort(
@@ -70,7 +71,10 @@ const listeProduits = {
         <img class="noyau" src="/brand/logos/icon-rounded.svg" alt="" width="112" height="112" />
         {
           enLigne.slice(0, 3).map((p, i) => (
-            <span class={`etiquette etiquette-${i + 1}`}>{p.data.nom}</span>
+            <span class={`etiquette etiquette-${i + 1}`}>
+              <img src={p.data.logo} alt="" width="18" height="18" />
+              {p.data.nom}
+            </span>
           ))
         }
       </div>
@@ -95,7 +99,7 @@ const listeProduits = {
             <li data-reveal style={`--i: ${i}`}>
               <a class="sx-card carte" href={`/produits/${p.id}/`}>
                 <span class="carte-haut">
-                  <span class="numero">{String(i + 1).padStart(2, '0')}</span>
+                  <LogoProduit src={p.data.logo} taille={56} />
                   <span class="badge" data-statut={p.data.statut}>
                     {p.data.statut}
                   </span>
@@ -113,7 +117,7 @@ const listeProduits = {
         <li data-reveal style={`--i: ${produits.length}`}>
           <div class="carte carte-suivante">
             <span class="carte-haut">
-              <span class="numero">{String(produits.length + 1).padStart(2, '0')}</span>
+              <span class="tuile-vide" aria-hidden="true">+</span>
               <span class="badge">en préparation</span>
             </span>
             <span class="carte-nom">Le prochain</span>
@@ -332,6 +336,9 @@ const listeProduits = {
   }
   .etiquette {
     position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sx-space-2);
     font-size: var(--sx-fs-sm);
     font-weight: 500;
     padding: var(--sx-space-2) var(--sx-space-4);
@@ -340,6 +347,11 @@ const listeProduits = {
     backdrop-filter: blur(8px);
     border: 1px solid var(--sx-border);
     white-space: nowrap;
+  }
+  .etiquette img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
   }
   .etiquette-1 {
     top: 9%;
@@ -412,11 +424,22 @@ const listeProduits = {
     align-items: center;
     margin-bottom: var(--sx-space-5);
   }
-  .numero {
-    font-size: var(--sx-fs-sm);
-    font-weight: 500;
+  .tuile-vide {
+    display: inline-grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    border: 2px dashed var(--sx-border);
     color: var(--sx-text-muted);
-    font-variant-numeric: tabular-nums;
+    font-size: var(--sx-fs-xl);
+    font-weight: 500;
+  }
+  a.carte:hover :global(.tuile) {
+    transform: rotate(-6deg) scale(1.05);
+  }
+  .carte :global(.tuile) {
+    transition: transform var(--sx-dur) var(--sx-ease);
   }
   .carte-nom {
     font-size: var(--sx-fs-2xl);

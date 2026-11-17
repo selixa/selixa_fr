@@ -14,3 +14,7 @@ Site statique Astro (aucun framework JS côté client), déployé sur Cloudflare
 - Seule la fiche Koloni affiche un lien GitHub (`github` dans le front matter). Pas de réseaux sociaux pour l'instant.
 - Ne pas inventer de chiffres, témoignages, logos clients ni informations légales : mettre `[À COMPLÉTER]`.
 - Rédaction : vouvoiement, typographie française, pas d'emoji.
+
+## Logos et vidéos produits
+- Logos carrés des produits dans `public/brand/produits/<slug>.svg` (copiés des dépôts des produits, ne pas les redessiner), affichés via `src/components/LogoProduit.astro` sur une tuile claire `--sx-logo-tile`.
+- Vidéo de présentation facultative (`video` dans le front matter) : MP4 720p compressé, poster JPG et sous-titres VTT dans `public/media/<slug>/`. Source Koloni : `~/dev/koloni/motion/out/koloni-pitch.mp4` (Remotion), réencodé avec `npx remotion ffmpeg` (CRF 27, 1280 px, faststart).

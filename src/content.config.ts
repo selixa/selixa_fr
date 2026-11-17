@@ -13,6 +13,17 @@ const produits = defineCollection({
     titreSeo: z.string(),
     categorie: z.string(),
     statut: z.enum(['en ligne', 'bêta', 'en préparation']),
+    /** Logo carré du produit, servi depuis public/ (ex. /brand/produits/koloni.svg). */
+    logo: z.string(),
+    /** Vidéo de présentation affichée en haut de la fiche. */
+    video: z
+      .object({
+        src: z.string(),
+        poster: z.string(),
+        sousTitres: z.string().optional(),
+        titre: z.string(),
+      })
+      .optional(),
     url: z.string().url().optional(),
     /** Organisation ou dépôt de code public, affiché sur la fiche. */
     github: z.string().url().optional(),

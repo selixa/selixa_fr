@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { engagements } from '../data/engagements';
+import { getCollection } from 'astro:content';
 import police500 from '../../design-system/fonts/space-grotesk-latin-500-normal.woff2?url';
 import police700 from '../../design-system/fonts/space-grotesk-latin-700-normal.woff2?url';
 
@@ -25,6 +26,9 @@ const titreComplet = titre ? `${titre} | Selixacorp` : 'Selixacorp, éditeur de 
 const canonique = new URL(Astro.url.pathname, Astro.site);
 const image = new URL('/brand/og.png', Astro.site);
 const annee = new Date().getFullYear();
+const produitsPied = (await getCollection('produits', ({ data }) => !data.brouillon)).sort(
+  (a, b) => a.data.ordre - b.data.ordre
+);
 
 const organisation = {
   '@context': 'https://schema.org',
@@ -143,9 +147,14 @@ const nav = [
         <div>
           <p class="pied-titre">Produits</p>
           <ul>
-            <li><a href="/produits/koloni/">Koloni</a></li>
-            <li><a href="/produits/bonjour-guide/">bonjour.guide</a></li>
-            <li><a href="/produits/freat/">Freat</a></li>
+            {produitsPied.map((p) => (
+              <li>
+                <a class="lien-produit" href={`/produits/${p.id}/`}>
+                  <span class="mini-tuile"><img src={p.data.logo} alt="" width="14" height="14" loading="lazy" /></span>
+                  {p.data.nom}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
         <div>
@@ -312,6 +321,24 @@ const nav = [
         padding: 0;
         display: grid;
         gap: var(--sx-space-2);
+      }
+      .lien-produit {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--sx-space-2);
+      }
+      .mini-tuile {
+        display: inline-grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        background: var(--sx-logo-tile);
+      }
+      .mini-tuile img {
+        width: 14px;
+        height: 14px;
+        object-fit: contain;
       }
       .pied-bas {
         display: flex;

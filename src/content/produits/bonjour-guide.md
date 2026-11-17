@@ -4,6 +4,7 @@ accroche: "Le livre d'accueil en ligne de votre location, prêt en 10 minutes et
 description: "bonjour.guide crée en 10 minutes le livre d'accueil de votre location de vacances, traduit automatiquement et partagé par QR code. Gratuit pour commencer."
 titreSeo: "bonjour.guide, le livre d'accueil numérique pour locations de vacances"
 categorie: "Location saisonnière"
+logo: "/brand/produits/bonjour-guide.svg"
 statut: "en ligne"
 url: "https://bonjour.guide"
 depuis: "2026"

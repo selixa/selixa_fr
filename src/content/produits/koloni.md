@@ -4,6 +4,12 @@ accroche: "Le logiciel de gestion des accueils collectifs de mineurs : inscripti
 description: "Koloni simplifie la gestion des accueils collectifs de mineurs : inscriptions en ligne, facturation, fiches sanitaires, conformité et préparation de la déclaration."
 titreSeo: "Koloni, logiciel de gestion des accueils collectifs de mineurs"
 categorie: "Gestion des accueils de loisirs et séjours"
+logo: "/brand/produits/koloni.svg"
+video:
+  src: "/media/koloni/koloni-pitch.mp4"
+  poster: "/media/koloni/koloni-pitch.jpg"
+  sousTitres: "/media/koloni/koloni-pitch.vtt"
+  titre: "Koloni en 60 secondes"
 statut: "en ligne"
 url: "https://koloni.fr"
 github: "https://github.com/Koloni-fr"
