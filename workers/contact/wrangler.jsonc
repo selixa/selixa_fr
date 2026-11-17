@@ -1,0 +1,11 @@
+{
+  // Formulaire de contact de selixa.fr. Déploiement : `npx wrangler deploy` depuis ce dossier.
+  // Secret à poser une fois : `npx wrangler secret put CONTACT_TO` (adresse de réception vérifiée).
+  "name": "selixa-contact",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-17",
+  "account_id": "fe2c723a2e4ded88c36a7c42c78f1285",
+  "routes": [{ "pattern": "selixa.fr/api/contact", "zone_name": "selixa.fr" }],
+  "send_email": [{ "name": "EMAIL" }],
+  "vars": { "CONTACT_FROM": "contact@selixa.fr" }
+}

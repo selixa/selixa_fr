@@ -62,20 +62,19 @@ Thème : préférence système par défaut, bascule dans l'en-tête mémorisée 
 
 ## Formulaire de contact
 
-Le formulaire poste sur `/api/contact`, servi par la Pages Function
-`functions/api/contact.ts` qui relaie vers Resend. Trois variables d'environnement à
-créer dans Cloudflare Pages (Settings → Environment variables), pour production **et**
-preview :
+Le formulaire poste sur `/api/contact`, servi par le Worker `selixa-contact`
+(`workers/contact/`, route `selixa.fr/api/contact`). Il envoie le message par
+**Cloudflare Email Service**, sans prestataire externe : l'envoi vers une adresse de
+destination vérifiée du compte est gratuit et ne demande qu'Email Routing activé sur
+selixa.fr. Le bouton « Répondre » de l'e-mail reçu répond directement à l'expéditeur.
 
-| Variable         | Exemple                       |
-| ---------------- | ----------------------------- |
-| `RESEND_API_KEY` | `re_...` (chiffrée)           |
-| `CONTACT_TO`     | `alexis@selixa.fr`            |
-| `CONTACT_FROM`   | `site@selixa.fr`              |
+- Adresse de réception : secret `CONTACT_TO` du Worker (jamais dans le dépôt, qui est public).
+  Elle doit être vérifiée dans Email Routing > Destination addresses.
+- Expéditeur : `CONTACT_FROM` (`contact@selixa.fr`).
+- Déployer : `cd workers/contact && npx wrangler deploy` ; secret : `npx wrangler secret put CONTACT_TO`.
 
-Le domaine de `CONTACT_FROM` doit être vérifié dans Resend (SPF + DKIM). Un champ
-piège invisible (`societe`) absorbe les robots : s'il est rempli, la fonction répond
-204 sans rien envoyer.
+Un champ piège invisible (`societe`) absorbe les robots : s'il est rempli, le Worker
+répond 204 sans rien envoyer.
 
 ## Redirections
 

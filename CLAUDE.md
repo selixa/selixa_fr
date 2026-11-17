@@ -18,3 +18,7 @@ Site statique Astro (aucun framework JS côté client), déployé sur Cloudflare
 ## Logos et vidéos produits
 - Logos carrés des produits dans `public/brand/produits/<slug>.svg` (copiés des dépôts des produits, ne pas les redessiner), affichés via `src/components/LogoProduit.astro` sur une tuile claire `--sx-logo-tile`.
 - Vidéo de présentation facultative (`video` dans le front matter) : MP4 720p compressé, poster JPG et sous-titres VTT dans `public/media/<slug>/`. Source Koloni : `~/dev/koloni/motion/out/koloni-pitch.mp4` (Remotion), réencodé avec `npx remotion ffmpeg` (CRF 27, 1280 px, faststart).
+
+## Formulaire de contact
+- Worker `workers/contact/` (route `selixa.fr/api/contact`), envoi par Cloudflare Email Service vers une destination vérifiée. Plus de Resend ni de Pages Function.
+- Ne jamais écrire l'adresse de réception dans le dépôt (public) : c'est le secret `CONTACT_TO` du Worker.
